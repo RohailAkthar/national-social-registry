@@ -86,6 +86,46 @@ class Initializer(BaseInitializer):
             "ALTER TABLE g2p_registry_configuration ADD COLUMN IF NOT EXISTS registry_favicon VARCHAR;",
         ]
 
+        household_cols = [
+            "household_head_person_id VARCHAR",
+            "household_head_internal_record_id VARCHAR",
+            "household_head_name VARCHAR",
+            "headship_type VARCHAR",
+            "husband_dead BOOLEAN DEFAULT FALSE",
+            "husband_dead_date DATE",
+            "size_total INTEGER",
+            "size_adults INTEGER",
+            "size_children_u5 INTEGER",
+            "size_school_age INTEGER",
+            "size_elderly INTEGER",
+            "number_of_female_members INTEGER",
+            "number_of_male_members INTEGER",
+            "elderly_member_present BOOLEAN",
+            "dwelling_type VARCHAR",
+            "roof_material VARCHAR",
+            "wall_material VARCHAR",
+            "floor_material VARCHAR",
+            "tenure_status VARCHAR",
+            "rooms_count INTEGER",
+            "overcrowding_indicator NUMERIC",
+            "water_source_type VARCHAR",
+            "water_distance_minutes INTEGER",
+            "sanitation_type VARCHAR",
+            "lighting_source VARCHAR",
+            "cooking_fuel_type VARCHAR",
+            "mobile_phone_type VARCHAR",
+            "region_code VARCHAR",
+            "zone_subcity_code VARCHAR",
+            "woreda_code VARCHAR",
+            "locality_ea_code VARCHAR",
+            "kebele_code VARCHAR",
+            "address_descriptor VARCHAR",
+        ]
+        for tbl in ["g2p_intake_form_households", "g2p_register_households", "g2p_register_history_households"]:
+            for col in household_cols:
+                direct_sqls.append(f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS {col};")
+
+
         try:
             async with dbengine.get().connect() as conn:
                 raw_conn = await conn.get_raw_connection()

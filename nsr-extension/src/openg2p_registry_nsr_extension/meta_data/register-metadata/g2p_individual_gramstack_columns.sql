@@ -2,6 +2,8 @@
 -- Automatically executed upon deployment to ensure all 6 registries' columns exist in individuals tables
 
 DO $$
+DECLARE
+    tbl text;
 BEGIN
     -- 0. Fix missing core platform columns
     ALTER TABLE g2p_intake_form_submissions ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
@@ -12,6 +14,43 @@ BEGIN
     ALTER TABLE g2p_register_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
     ALTER TABLE g2p_register_history_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
     ALTER TABLE g2p_registry_configuration ADD COLUMN IF NOT EXISTS registry_favicon VARCHAR;
+
+    -- Household tables columns
+    FOR tbl IN SELECT unnest(ARRAY['g2p_intake_form_households', 'g2p_register_households', 'g2p_register_history_households']) LOOP
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS household_head_person_id VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS household_head_internal_record_id VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS household_head_name VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS headship_type VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS husband_dead BOOLEAN DEFAULT FALSE;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS husband_dead_date DATE;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS size_total INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS size_adults INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS size_children_u5 INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS size_school_age INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS size_elderly INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS number_of_female_members INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS number_of_male_members INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS elderly_member_present BOOLEAN;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS dwelling_type VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS roof_material VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS wall_material VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS floor_material VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS tenure_status VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS rooms_count INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS overcrowding_indicator NUMERIC;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS water_source_type VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS water_distance_minutes INTEGER;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS sanitation_type VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS lighting_source VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS cooking_fuel_type VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS mobile_phone_type VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS region_code VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS zone_subcity_code VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS woreda_code VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS locality_ea_code VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS kebele_code VARCHAR;', tbl);
+        EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS address_descriptor VARCHAR;', tbl);
+    END LOOP;
 
     -- 1. Common Location, Personal & Financial Identifiers
     -- g2p_register_individuals
