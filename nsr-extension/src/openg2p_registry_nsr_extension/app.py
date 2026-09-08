@@ -70,34 +70,61 @@ class Initializer(BaseInitializer):
 
     async def fastapi_app_startup(self, app):
         await super().fastapi_app_startup(app)
-        from .deduplication_worker import start_deduplication_worker
-        start_deduplication_worker()
 
-        # Execute GramStack database migrations and 7 clean UI sections on startup
+        # 1. Execute GramStack database migrations and core fixes first
         import os
         from openg2p_fastapi_common.context import dbengine
 
+        direct_sqls = [
+            "ALTER TABLE g2p_intake_form_submissions ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
+            "ALTER TABLE g2p_intake_form_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
+            "ALTER TABLE g2p_register_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
+            "ALTER TABLE g2p_register_history_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
+            "ALTER TABLE g2p_intake_form_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
+            "ALTER TABLE g2p_register_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
+            "ALTER TABLE g2p_register_history_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
+            "ALTER TABLE g2p_registry_configuration ADD COLUMN IF NOT EXISTS registry_favicon VARCHAR;",
+        ]
+
+        try:
+            async with dbengine.get().connect() as conn:
+                raw_conn = await conn.get_raw_connection()
+                for query in direct_sqls:
+                    try:
+                        await raw_conn.driver_connection.execute(query)
+                    except Exception as e:
+                        _logger.debug(f"Direct SQL notice: {e}")
+        except Exception as e:
+            _logger.error(f"Error applying core platform column fixes: {e}")
+
+        # 2. Execute GramStack SQL scripts (columns + 7 clean UI sections)
         scripts = [
             "g2p_individual_gramstack_columns.sql",
             "g2p_individual_ui_columns_supplement.sql",
             "g2p_individual_ui_sections.sql",
         ]
         for script_name in scripts:
-            sql_file = os.path.join(
-                os.path.dirname(__file__),
-                f"meta_data/register-metadata/{script_name}",
-            )
-            if os.path.exists(sql_file):
-                try:
-                    _logger.info(f"Applying startup SQL migration: {script_name}")
-                    with open(sql_file, "r") as f:
-                        sql_content = f.read()
-                    async with dbengine.get().connect() as conn:
-                        raw_conn = await conn.get_raw_connection()
-                        await raw_conn.driver_connection.execute(sql_content)
-                    _logger.info(f"Successfully applied {script_name}")
-                except Exception as e:
-                    _logger.error(f"Error applying {script_name}: {e}", exc_info=True)
+            candidates = [
+                os.path.join(os.path.dirname(__file__), f"meta_data/register-metadata/{script_name}"),
+                f"/app/nsr-extension/src/openg2p_registry_nsr_extension/meta_data/register-metadata/{script_name}",
+            ]
+            for sql_file in candidates:
+                if os.path.exists(sql_file):
+                    try:
+                        _logger.info(f"Applying startup SQL migration: {sql_file}")
+                        with open(sql_file, "r") as f:
+                            sql_content = f.read()
+                        async with dbengine.get().connect() as conn:
+                            raw_conn = await conn.get_raw_connection()
+                            await raw_conn.driver_connection.execute(sql_content)
+                        _logger.info(f"Successfully applied {script_name}")
+                        break
+                    except Exception as e:
+                        _logger.error(f"Error applying {script_name}: {e}", exc_info=True)
+
+        # 3. Start background deduplication worker
+        from .deduplication_worker import start_deduplication_worker
+        start_deduplication_worker()
 
     def migrate_database(self, args):
 
