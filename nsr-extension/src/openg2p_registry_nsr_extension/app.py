@@ -134,19 +134,25 @@ class Initializer(BaseInitializer):
             from sqlalchemy import text
             from openg2p_fastapi_common.context import dbengine
 
-            sql_file = os.path.join(
-                os.path.dirname(__file__),
-                "meta_data/register-metadata/g2p_individual_gramstack_columns.sql",
-            )
-            if os.path.exists(sql_file):
-                try:
-                    with open(sql_file, "r") as f:
-                        sql_content = f.read()
-                    async with dbengine.get().begin() as conn:
-                        await conn.execute(text(sql_content))
-                    _logger.info("Executed GramStack columns migration successfully")
-                except Exception as e:
-                    _logger.error(f"Error executing GramStack columns migration: {e}")
+            scripts = [
+                "g2p_individual_gramstack_columns.sql",
+                "g2p_individual_ui_columns_supplement.sql",
+                "g2p_individual_ui_sections.sql",
+            ]
+            for script_name in scripts:
+                sql_file = os.path.join(
+                    os.path.dirname(__file__),
+                    f"meta_data/register-metadata/{script_name}",
+                )
+                if os.path.exists(sql_file):
+                    try:
+                        with open(sql_file, "r") as f:
+                            sql_content = f.read()
+                        async with dbengine.get().begin() as conn:
+                            await conn.execute(text(sql_content))
+                        _logger.info(f"Executed {script_name} successfully")
+                    except Exception as e:
+                        _logger.error(f"Error executing {script_name}: {e}")
 
         asyncio.run(migrate())
 
