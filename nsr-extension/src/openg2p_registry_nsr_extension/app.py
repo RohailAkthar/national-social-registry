@@ -125,6 +125,23 @@ class Initializer(BaseInitializer):
             for col in household_cols:
                 direct_sqls.append(f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS {col};")
 
+        # Fix g2p_registry_documents columns expected by base image model
+        direct_sqls.extend([
+            "ALTER TABLE g2p_registry_documents ADD COLUMN IF NOT EXISTS source_filename VARCHAR;",
+            "ALTER TABLE g2p_registry_documents ADD COLUMN IF NOT EXISTS bucket VARCHAR DEFAULT 'default';",
+            "ALTER TABLE g2p_registry_documents ADD COLUMN IF NOT EXISTS created_by VARCHAR;",
+            "ALTER TABLE g2p_registry_documents ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT now();",
+        ])
+
+        # Ensure g2p_intake_section_documents table exists
+        direct_sqls.append(
+            "CREATE TABLE IF NOT EXISTS g2p_intake_section_documents ("
+            "submission_id UUID NOT NULL, "
+            "document_id VARCHAR NOT NULL, "
+            "section_id VARCHAR NOT NULL, "
+            "label VARCHAR NOT NULL, "
+            "PRIMARY KEY (submission_id, document_id));"
+        )
 
         try:
             async with dbengine.get().connect() as conn:
