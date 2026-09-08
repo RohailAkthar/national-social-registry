@@ -73,6 +73,32 @@ class Initializer(BaseInitializer):
         from .deduplication_worker import start_deduplication_worker
         start_deduplication_worker()
 
+        # Execute GramStack database migrations and 7 clean UI sections on startup
+        import os
+        from openg2p_fastapi_common.context import dbengine
+
+        scripts = [
+            "g2p_individual_gramstack_columns.sql",
+            "g2p_individual_ui_columns_supplement.sql",
+            "g2p_individual_ui_sections.sql",
+        ]
+        for script_name in scripts:
+            sql_file = os.path.join(
+                os.path.dirname(__file__),
+                f"meta_data/register-metadata/{script_name}",
+            )
+            if os.path.exists(sql_file):
+                try:
+                    _logger.info(f"Applying startup SQL migration: {script_name}")
+                    with open(sql_file, "r") as f:
+                        sql_content = f.read()
+                    async with dbengine.get().connect() as conn:
+                        raw_conn = await conn.get_raw_connection()
+                        await raw_conn.driver_connection.execute(sql_content)
+                    _logger.info(f"Successfully applied {script_name}")
+                except Exception as e:
+                    _logger.error(f"Error applying {script_name}: {e}", exc_info=True)
+
     def migrate_database(self, args):
 
         async def migrate():
