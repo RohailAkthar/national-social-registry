@@ -46,6 +46,9 @@ from .register_domain.models import (
     G2PRegisterIndividualVulnerability,
     G2PRegisterHistoryIndividualVulnerability,
     G2PIntakeFormIndividualVulnerability,
+    G2PRegisterHouseholdPds,
+    G2PRegisterHistoryHouseholdPds,
+    G2PIntakeFormHouseholdPds,
 )
 from .register_domain.factory import G2PRegisterDomainFactory
 from .register_domain.services import (
@@ -123,4 +126,27 @@ class Initializer(BaseInitializer):
             await G2PRegisterHistoryIndividualVulnerability.create_migrate()
             await G2PIntakeFormIndividualVulnerability.create_migrate()
 
+            await G2PRegisterHouseholdPds.create_migrate()
+            await G2PRegisterHistoryHouseholdPds.create_migrate()
+            await G2PIntakeFormHouseholdPds.create_migrate()
+
+            import os
+            from sqlalchemy import text
+            from openg2p_fastapi_common.context import dbengine
+
+            sql_file = os.path.join(
+                os.path.dirname(__file__),
+                "meta_data/register-metadata/g2p_individual_gramstack_columns.sql",
+            )
+            if os.path.exists(sql_file):
+                try:
+                    with open(sql_file, "r") as f:
+                        sql_content = f.read()
+                    async with dbengine.get().begin() as conn:
+                        await conn.execute(text(sql_content))
+                    _logger.info("Executed GramStack columns migration successfully")
+                except Exception as e:
+                    _logger.error(f"Error executing GramStack columns migration: {e}")
+
         asyncio.run(migrate())
+
