@@ -65,6 +65,11 @@ class Initializer(BaseInitializer):
         G2PRegisterDomainServiceIndividual()
         G2PRegisterDomainServiceHousehold()
 
+    async def fastapi_app_startup(self, app):
+        await super().fastapi_app_startup(app)
+        from .deduplication_worker import start_deduplication_worker
+        start_deduplication_worker()
+
     def migrate_database(self, args):
 
         async def migrate():

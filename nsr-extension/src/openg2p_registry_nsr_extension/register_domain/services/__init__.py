@@ -9,6 +9,9 @@ from .g2p_register_domain_service_individual_program import (
 from .g2p_register_domain_service_household_program import (
     G2PRegisterDomainServiceHouseholdProgram,
 )
+from .g2p_register_domain_service_household_pds import (
+    G2PRegisterDomainServiceHouseholdPds,
+)
 from .g2p_register_domain_service_household_asset import G2PRegisterDomainServiceHouseholdAsset
 from .g2p_register_domain_service_individual_shock import G2PRegisterDomainServiceIndividualShock
 from .g2p_register_domain_service_household_housing_and_services import (

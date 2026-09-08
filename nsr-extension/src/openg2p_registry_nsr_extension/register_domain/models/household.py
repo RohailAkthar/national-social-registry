@@ -24,10 +24,11 @@ from .enums import (
 
 class G2PHousehold:
 
-    household_head_internal_record_id: Mapped[str] = mapped_column(
+    household_head_person_id: Mapped[str | None] = mapped_column(String, nullable=True)
+    household_head_internal_record_id: Mapped[str | None] = mapped_column(
         String, nullable=True, index=True
     )
-    household_head_name: Mapped[str] = mapped_column(String, nullable=True)
+    household_head_name: Mapped[str | None] = mapped_column(String, nullable=True)
     headship_type: Mapped[HeadshipTypeEnum] = mapped_column(String, nullable=True)
 
     husband_dead: Mapped[bool] = mapped_column(
@@ -58,6 +59,14 @@ class G2PHousehold:
     lighting_source: Mapped[LightingSourceEnum] = mapped_column(String, nullable=True)
     cooking_fuel_type: Mapped[CookingFuelEnum] = mapped_column(String, nullable=True)
     mobile_phone_type: Mapped[MobilePhoneTypeEnum] = mapped_column(String, nullable=True)
+
+    # Location Details (Bihar / NSR hierarchy)
+    region_code: Mapped[str | None] = mapped_column(String, nullable=True)
+    zone_subcity_code: Mapped[str | None] = mapped_column(String, nullable=True)
+    woreda_code: Mapped[str | None] = mapped_column(String, nullable=True)
+    locality_ea_code: Mapped[str | None] = mapped_column(String, nullable=True)
+    kebele_code: Mapped[str | None] = mapped_column(String, nullable=True)
+    address_descriptor: Mapped[str | None] = mapped_column(String, nullable=True)
 
 
 class G2PRegisterHousehold(G2PRegister, G2PGeo, G2PHousehold):

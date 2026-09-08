@@ -58,6 +58,11 @@ from .individual_vulnerability import (
     G2PRegisterHistoryIndividualVulnerability,
     G2PIntakeFormIndividualVulnerability,
 )
+from .household_pds import (
+    G2PRegisterHouseholdPds,
+    G2PRegisterHistoryHouseholdPds,
+    G2PIntakeFormHouseholdPds,
+)
 from .enums import (
     AgeMethodEnum,
     AssetTypeEnum,

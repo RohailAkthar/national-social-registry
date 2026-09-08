@@ -58,3 +58,8 @@ from .individual_vulnerability import (
     G2PRegisterHistorySchemaIndividualVulnerability,
     G2PIntakeFormSchemaIndividualVulnerability,
 )
+from .household_pds import (
+    G2PRegisterSchemaHouseholdPds,
+    G2PRegisterHistorySchemaHouseholdPds,
+    G2PIntakeFormSchemaHouseholdPds,
+)

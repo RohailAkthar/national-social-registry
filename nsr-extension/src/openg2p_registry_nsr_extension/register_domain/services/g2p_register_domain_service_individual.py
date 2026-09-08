@@ -33,10 +33,8 @@ class G2PRegisterDomainServiceIndividual(G2PRegisterDomainService):
             self._validate_estimated_age(record)
 
     def _validate_middle_name(self, record: dict) -> None:
-        if not has_keys(record, "middle_name"):
-            return
-        if is_blank(record.get("middle_name")):
-            validation_error("middle_name is required")
+        # Middle name is optional
+        return
 
     def _validate_birth_date(self, record: dict) -> None:
         if not has_keys(record, "birth_date"):

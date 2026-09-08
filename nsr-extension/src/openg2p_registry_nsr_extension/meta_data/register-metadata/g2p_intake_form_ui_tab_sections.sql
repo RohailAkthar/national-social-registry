@@ -1,4 +1,4 @@
-INSERT INTO "public"."g2p_intake_form_ui_tab_sections" ("tab_section_id","tab_id","section_id","section_order") VALUES 
+INSERT INTO "public"."g2p_intake_form_ui_tab_sections" ("tab_section_id","tab_id","section_id","section_order") VALUES
 ('0d79184a-f8a9-4de1-a9c1-03f2f5aeb894','nsr_form_tab_individual_intake','in_table_disabilities',5),
 ('92465546-25a1-45c8-a0e5-6a3c4e60c818','nsr_form_tab_individual_intake','d1e81461-ee90-483f-8cf2-19028657bca1',6),
 ('82276bef-b20f-480d-9235-10fab14281cd','nsr_form_tab_individual_intake','in_identifier',9),
@@ -16,7 +16,6 @@ INSERT INTO "public"."g2p_intake_form_ui_tab_sections" ("tab_section_id","tab_id
 ('6fb0fdf0-476f-4640-a297-20ecf395b093','nsr_form_tab_household_intake','hh_location_details',7),
 ('4d197087-c86c-489d-b7ce-18287892ac86','nsr_form_tab_household_intake','hh_members',8),
 ('7b0fba3e-97ef-42c0-a9bc-50623c46c4cf','nsr_form_tab_household_intake','hh_table_program_enrolments',9),
-('b6493ee8-27a0-4ee3-9420-cce28e1bb4b1','nsr_form_tab_household_intake','hh_roster',10),
 ('c8e45540-6704-4848-96bc-b50ce008b0d4','nsr_form_tab_individual_intake','in_demographic_details',3),
-('99a993b3-9460-449e-9da8-031c09ee5586','nsr_form_tab_individual_intake','in_contact_details',4);
-
+('99a993b3-9460-449e-9da8-031c09ee5586','nsr_form_tab_individual_intake','in_contact_details',4),
+('6a887079-4cbb-4fde-9d0f-9df578569bd4','nsr_form_tab_household_intake','hh_table_pds',10);

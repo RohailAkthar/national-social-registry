@@ -1,5 +1,6 @@
+from datetime import date
 from openg2p_registry_core.models.g2p_intake_form import G2PIntakeForm
-from sqlalchemy import JSON, Integer, Numeric, String, select
+from sqlalchemy import JSON, Boolean, Date, Integer, Numeric, String, select
 from sqlalchemy.orm import Mapped, mapped_column
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
 from ..services import G2PRegisterDomainServiceHouseholdAsset
@@ -15,6 +16,24 @@ class G2PHouseholdAsset:
     size_unit: Mapped[str] = mapped_column(String, nullable=True)
     size_band: Mapped[str] = mapped_column(String, nullable=True)
     details: Mapped[dict] = mapped_column(JSON, nullable=True)
+
+    # BiharBhumi Land Records
+    jamabandi_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    khata_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    khesra_numbers: Mapped[str | None] = mapped_column(String, nullable=True)
+    rayat_name: Mapped[str | None] = mapped_column(String, nullable=True)
+    rakba_area: Mapped[float | None] = mapped_column(Numeric(12, 2), nullable=True)
+    land_type: Mapped[str | None] = mapped_column(String, nullable=True)
+    mauza: Mapped[str | None] = mapped_column(String, nullable=True)
+    anchal: Mapped[str | None] = mapped_column(String, nullable=True)
+    district: Mapped[str | None] = mapped_column(String, nullable=True)
+    mutation_status: Mapped[str | None] = mapped_column(String, nullable=True)
+    last_mutation_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    lpc_status: Mapped[str | None] = mapped_column(String, nullable=True)
+    lpc_certificate_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    encumbrance_status: Mapped[str | None] = mapped_column(String, nullable=True)
+    bhu_lagan_paid_status: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    registration_deed_number: Mapped[str | None] = mapped_column(String, nullable=True)
 
 
 class G2PRegisterHouseholdAsset(G2PRegister, G2PHouseholdAsset):
