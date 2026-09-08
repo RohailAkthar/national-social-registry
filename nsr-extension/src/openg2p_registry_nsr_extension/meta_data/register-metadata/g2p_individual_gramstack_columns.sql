@@ -5,6 +5,12 @@ DO $$
 BEGIN
     -- 0. Fix missing core platform columns
     ALTER TABLE g2p_intake_form_submissions ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
+    ALTER TABLE g2p_intake_form_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
+    ALTER TABLE g2p_register_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
+    ALTER TABLE g2p_register_history_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
+    ALTER TABLE g2p_intake_form_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
+    ALTER TABLE g2p_register_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
+    ALTER TABLE g2p_register_history_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
     ALTER TABLE g2p_registry_configuration ADD COLUMN IF NOT EXISTS registry_favicon VARCHAR;
 
     -- 1. Common Location, Personal & Financial Identifiers
