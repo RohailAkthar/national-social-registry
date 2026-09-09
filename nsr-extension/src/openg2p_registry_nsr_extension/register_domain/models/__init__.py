@@ -13,6 +13,21 @@ from .household import (
     G2PRegisterHistoryHousehold,
     G2PIntakeFormHousehold,
 )
+from .farmer import (
+    G2PRegisterFarmer,
+    G2PRegisterHistoryFarmer,
+    G2PIntakeFormFarmer,
+)
+from .farmer_land import (
+    G2PRegisterFarmerLand,
+    G2PRegisterHistoryFarmerLand,
+    G2PIntakeFormFarmerLand,
+)
+from .farmer_crop import (
+    G2PRegisterFarmerCrop,
+    G2PRegisterHistoryFarmerCrop,
+    G2PIntakeFormFarmerCrop,
+)
 from .individual_program import (
     G2PRegisterIndividualProgram,
     G2PRegisterHistoryIndividualProgram,

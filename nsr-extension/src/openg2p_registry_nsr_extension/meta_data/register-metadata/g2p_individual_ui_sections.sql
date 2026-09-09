@@ -1,33 +1,167 @@
--- GramStack Clean UI Sections for Individual Intake Form
--- Replaces generic/irrelevant sections with 7 focused multi-registry sections
+-- GramStack Clean UI Sections for Individual Register & Intake Form (PDS-Only)
 BEGIN;
 
 -- 1. Delete previous mapping for individual intake tab
 DELETE FROM g2p_intake_form_ui_tab_sections WHERE tab_id = 'nsr_form_tab_individual_intake';
 
--- 2. Upsert sections in g2p_register_sections
-DELETE FROM g2p_register_sections WHERE section_id = 'in_section_demographics';
-INSERT INTO g2p_register_sections (section_id, register_id, section_register_id, is_core_section, section_mnemonic, documents_required, no_of_verifications_required, is_list, section_weightage, cr_auto_approve_for_bene_portal, cr_auto_approve_for_agent_portal, cr_auto_approve_for_staff_portal, cr_auto_approve_for_partner, section_ui_schema) VALUES ('in_section_demographics', 'a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', false, 'in_section_demographics', false, 0, false, 10, false, false, false, false, '{"panels": [{"panels": [{"widgets": [{"widget": "text", "widget-id": "first_name", "widget-type": "input", "widget-label": "First Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.first_name"}, {"widget": "text", "widget-id": "middle_name", "widget-type": "input", "widget-label": "Middle Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.middle_name"}, {"widget": "text", "widget-id": "last_name", "widget-type": "input", "widget-label": "Last Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.last_name"}, {"widget": "date", "widget-id": "birth_date", "widget-type": "input", "widget-label": "Date of Birth", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.birth_date"}, {"widget": "number", "widget-id": "estimated_age", "widget-type": "input", "widget-label": "Age", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.estimated_age"}, {"widget": "select", "widget-id": "gender", "widget-type": "input", "widget-label": "Gender", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.gender", "widget-data-source": {"type": "static", "options": [{"label": "MALE", "value": "MALE"}, {"label": "FEMALE", "value": "FEMALE"}, {"label": "OTHERS", "value": "OTHERS"}]}}], "panel-id": "panel_in_section_demographics_col1", "panel-orientation": "vertical"}, {"widgets": [{"widget": "select", "widget-id": "marital_status", "widget-type": "input", "widget-label": "Marital Status", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.marital_status", "widget-data-source": {"type": "static", "options": [{"label": "MARRIED", "value": "MARRIED"}, {"label": "UNMARRIED", "value": "UNMARRIED"}, {"label": "WIDOWED", "value": "WIDOWED"}, {"label": "DIVORCED", "value": "DIVORCED"}]}}, {"widget": "text", "widget-id": "religion", "widget-type": "input", "widget-label": "Religion", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.religion"}, {"widget": "text", "widget-id": "caste", "widget-type": "input", "widget-label": "Caste / Category", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.caste"}, {"widget": "select", "widget-id": "relationship_to_head", "widget-type": "input", "widget-label": "Relationship to Head", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.relationship_to_head", "widget-data-source": {"type": "static", "options": [{"label": "HEAD", "value": "HEAD"}, {"label": "SPOUSE", "value": "SPOUSE"}, {"label": "SON", "value": "SON"}, {"label": "DAUGHTER", "value": "DAUGHTER"}, {"label": "PARENT", "value": "PARENT"}, {"label": "OTHER", "value": "OTHER"}]}}, {"widget": "text", "widget-id": "aadhaar_no", "widget-type": "input", "widget-label": "Aadhaar Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.aadhaar_no"}, {"widget": "text", "widget-id": "primary_phone_number", "widget-type": "input", "widget-label": "Mobile Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.primary_phone_number"}], "panel-id": "panel_in_section_demographics_col2", "panel-orientation": "vertical"}, {"widgets": [{"widget": "text", "widget-id": "district", "widget-type": "input", "widget-label": "District", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.district"}, {"widget": "text", "widget-id": "block", "widget-type": "input", "widget-label": "Block", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.block"}, {"widget": "text", "widget-id": "gram_panchayat", "widget-type": "input", "widget-label": "Gram Panchayat", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.gram_panchayat"}, {"widget": "text", "widget-id": "village", "widget-type": "input", "widget-label": "Village", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.village"}, {"widget": "text", "widget-id": "pin_code", "widget-type": "input", "widget-label": "PIN Code", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pin_code"}, {"widget": "text", "widget-id": "bank_name", "widget-type": "input", "widget-label": "Bank Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.bank_name"}, {"widget": "text", "widget-id": "bank_account_no", "widget-type": "input", "widget-label": "Bank Account Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.bank_account_no"}, {"widget": "text", "widget-id": "ifsc_code", "widget-type": "input", "widget-label": "IFSC Code", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.ifsc_code"}], "panel-id": "panel_in_section_demographics_col3", "panel-orientation": "vertical"}], "panel-id": "panel_in_section_demographics_main", "panel-orientation": "horizontal"}], "section-id": "in_section_demographics", "section-title": "Citizen Demographics, Identity & Location", "section-editable": true, "section-supporting-documents": []}'::jsonb);
-DELETE FROM g2p_register_sections WHERE section_id = 'in_section_shg';
-INSERT INTO g2p_register_sections (section_id, register_id, section_register_id, is_core_section, section_mnemonic, documents_required, no_of_verifications_required, is_list, section_weightage, cr_auto_approve_for_bene_portal, cr_auto_approve_for_agent_portal, cr_auto_approve_for_staff_portal, cr_auto_approve_for_partner, section_ui_schema) VALUES ('in_section_shg', 'a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', false, 'in_section_shg', false, 0, false, 10, false, false, false, false, '{"panels": [{"panels": [{"widgets": [{"widget": "text", "widget-id": "shg_id", "widget-type": "input", "widget-label": "SHG ID", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.shg_id"}, {"widget": "text", "widget-id": "shg_name", "widget-type": "input", "widget-label": "SHG Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.shg_name"}, {"widget": "text", "widget-id": "vo_name", "widget-type": "input", "widget-label": "Village Organization (VO)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.vo_name"}, {"widget": "text", "widget-id": "clf_name", "widget-type": "input", "widget-label": "Cluster Level Fed (CLF)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.clf_name"}, {"widget": "text", "widget-id": "shg_member_name", "widget-type": "input", "widget-label": "SHG Member Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.shg_member_name"}], "panel-id": "panel_in_section_shg_col1", "panel-orientation": "vertical"}, {"widgets": [{"widget": "text", "widget-id": "shg_role", "widget-type": "input", "widget-label": "SHG Role", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.shg_role"}, {"widget": "text", "widget-id": "shg_grading", "widget-type": "input", "widget-label": "SHG Grading", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.shg_grading"}, {"widget": "text", "widget-id": "shg_join_date", "widget-type": "input", "widget-label": "SHG Join Date", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.shg_join_date"}, {"widget": "number", "widget-id": "monthly_savings_amount", "widget-type": "input", "widget-label": "Monthly Savings Amount (\u20b9)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.monthly_savings_amount"}, {"widget": "number", "widget-id": "internal_loan_outstanding", "widget-type": "input", "widget-label": "Internal Loan Outstanding (\u20b9)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.internal_loan_outstanding"}], "panel-id": "panel_in_section_shg_col2", "panel-orientation": "vertical"}, {"widgets": [{"widget": "number", "widget-id": "ccl_limit", "widget-type": "input", "widget-label": "CCL Limit (\u20b9)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.ccl_limit"}, {"widget": "number", "widget-id": "ccl_utilised", "widget-type": "input", "widget-label": "CCL Utilised (\u20b9)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.ccl_utilised"}, {"widget": "text", "widget-id": "shg_bank_account_no", "widget-type": "input", "widget-label": "SHG Bank Account No", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.shg_bank_account_no"}, {"widget": "text", "widget-id": "shg_ifsc", "widget-type": "input", "widget-label": "SHG Bank IFSC", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.shg_ifsc"}], "panel-id": "panel_in_section_shg_col3", "panel-orientation": "vertical"}], "panel-id": "panel_in_section_shg_main", "panel-orientation": "horizontal"}], "section-id": "in_section_shg", "section-title": "JEEViKA Self-Help Group (SHG) Registry", "section-editable": true, "section-supporting-documents": []}'::jsonb);
-DELETE FROM g2p_register_sections WHERE section_id = 'in_section_biharbhumi';
-INSERT INTO g2p_register_sections (section_id, register_id, section_register_id, is_core_section, section_mnemonic, documents_required, no_of_verifications_required, is_list, section_weightage, cr_auto_approve_for_bene_portal, cr_auto_approve_for_agent_portal, cr_auto_approve_for_staff_portal, cr_auto_approve_for_partner, section_ui_schema) VALUES ('in_section_biharbhumi', 'a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', false, 'in_section_biharbhumi', false, 0, false, 10, false, false, false, false, '{"panels": [{"panels": [{"widgets": [{"widget": "text", "widget-id": "khatian_number", "widget-type": "input", "widget-label": "Khatian Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.khatian_number"}, {"widget": "text", "widget-id": "khata_number", "widget-type": "input", "widget-label": "Khata Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.khata_number"}, {"widget": "text", "widget-id": "plot_number", "widget-type": "input", "widget-label": "Plot / Khasra Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.plot_number"}, {"widget": "text", "widget-id": "mauza", "widget-type": "input", "widget-label": "Mauza", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.mauza"}], "panel-id": "panel_in_section_biharbhumi_col1", "panel-orientation": "vertical"}, {"widgets": [{"widget": "number", "widget-id": "total_land_area_acres", "widget-type": "input", "widget-label": "Total Land Area (Acres)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.total_land_area_acres"}, {"widget": "number", "widget-id": "irrigated_land_area_acres", "widget-type": "input", "widget-label": "Irrigated Land Area (Acres)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.irrigated_land_area_acres"}, {"widget": "number", "widget-id": "unirrigated_land_area_acres", "widget-type": "input", "widget-label": "Unirrigated Land Area (Acres)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.unirrigated_land_area_acres"}, {"widget": "text", "widget-id": "land_classification", "widget-type": "input", "widget-label": "Land Classification", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.land_classification"}], "panel-id": "panel_in_section_biharbhumi_col2", "panel-orientation": "vertical"}, {"widgets": [{"widget": "text", "widget-id": "soil_type", "widget-type": "input", "widget-label": "Soil Type", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.soil_type"}, {"widget": "text", "widget-id": "mutation_status", "widget-type": "input", "widget-label": "Mutation Status", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.mutation_status"}, {"widget": "text", "widget-id": "jamabandi_number", "widget-type": "input", "widget-label": "Jamabandi Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.jamabandi_number"}, {"widget": "text", "widget-id": "land_ownership_type", "widget-type": "input", "widget-label": "Ownership Type", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.land_ownership_type"}], "panel-id": "panel_in_section_biharbhumi_col3", "panel-orientation": "vertical"}], "panel-id": "panel_in_section_biharbhumi_main", "panel-orientation": "horizontal"}], "section-id": "in_section_biharbhumi", "section-title": "BiharBhumi Land Records Registry", "section-editable": true, "section-supporting-documents": []}'::jsonb);
-DELETE FROM g2p_register_sections WHERE section_id = 'in_section_agristack';
-INSERT INTO g2p_register_sections (section_id, register_id, section_register_id, is_core_section, section_mnemonic, documents_required, no_of_verifications_required, is_list, section_weightage, cr_auto_approve_for_bene_portal, cr_auto_approve_for_agent_portal, cr_auto_approve_for_staff_portal, cr_auto_approve_for_partner, section_ui_schema) VALUES ('in_section_agristack', 'a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', false, 'in_section_agristack', false, 0, false, 10, false, false, false, false, '{"panels": [{"panels": [{"widgets": [{"widget": "text", "widget-id": "farmer_id", "widget-type": "input", "widget-label": "Farmer ID", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.farmer_id"}, {"widget": "text", "widget-id": "pm_kisan_id", "widget-type": "input", "widget-label": "PM-Kisan ID", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pm_kisan_id"}, {"widget": "text", "widget-id": "pm_kisan_status", "widget-type": "input", "widget-label": "PM-Kisan Status", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pm_kisan_status"}, {"widget": "number", "widget-id": "pm_kisan_installment_count", "widget-type": "input", "widget-label": "PM-Kisan Installments Received", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pm_kisan_installment_count"}], "panel-id": "panel_in_section_agristack_col1", "panel-orientation": "vertical"}, {"widgets": [{"widget": "text", "widget-id": "primary_crop", "widget-type": "input", "widget-label": "Primary Crop", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.primary_crop"}, {"widget": "text", "widget-id": "secondary_crop", "widget-type": "input", "widget-label": "Secondary Crop", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.secondary_crop"}, {"widget": "number", "widget-id": "kcc_sanctioned_amount", "widget-type": "input", "widget-label": "KCC Sanctioned Limit (\u20b9)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.kcc_sanctioned_amount"}, {"widget": "number", "widget-id": "kcc_outstanding_amount", "widget-type": "input", "widget-label": "KCC Outstanding Amount (\u20b9)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.kcc_outstanding_amount"}], "panel-id": "panel_in_section_agristack_col2", "panel-orientation": "vertical"}, {"widgets": [{"widget": "boolean", "widget-id": "soil_health_card_issued", "widget-type": "input", "widget-label": "Soil Health Card Issued", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.soil_health_card_issued"}, {"widget": "boolean", "widget-id": "crop_insurance_enrolled", "widget-type": "input", "widget-label": "PMFBY Crop Insurance Enrolled", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.crop_insurance_enrolled"}], "panel-id": "panel_in_section_agristack_col3", "panel-orientation": "vertical"}], "panel-id": "panel_in_section_agristack_main", "panel-orientation": "horizontal"}], "section-id": "in_section_agristack", "section-title": "Farmer Registry (AgriStack)", "section-editable": true, "section-supporting-documents": []}'::jsonb);
-DELETE FROM g2p_register_sections WHERE section_id = 'in_section_pds';
-INSERT INTO g2p_register_sections (section_id, register_id, section_register_id, is_core_section, section_mnemonic, documents_required, no_of_verifications_required, is_list, section_weightage, cr_auto_approve_for_bene_portal, cr_auto_approve_for_agent_portal, cr_auto_approve_for_staff_portal, cr_auto_approve_for_partner, section_ui_schema) VALUES ('in_section_pds', 'a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', false, 'in_section_pds', false, 0, false, 10, false, false, false, false, '{"panels": [{"panels": [{"widgets": [{"widget": "text", "widget-id": "pds_ration_card_number", "widget-type": "input", "widget-label": "Ration Card Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pds_ration_card_number"}, {"widget": "text", "widget-id": "pds_card_type", "widget-type": "input", "widget-label": "Ration Card Type", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pds_card_type"}, {"widget": "text", "widget-id": "fps_shop_code", "widget-type": "input", "widget-label": "Fair Price Shop Code", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.fps_shop_code"}], "panel-id": "panel_in_section_pds_col1", "panel-orientation": "vertical"}, {"widgets": [{"widget": "text", "widget-id": "fps_dealer_name", "widget-type": "input", "widget-label": "FPS Dealer Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.fps_dealer_name"}, {"widget": "number", "widget-id": "pds_family_member_count", "widget-type": "input", "widget-label": "Family Member Count", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pds_family_member_count"}, {"widget": "number", "widget-id": "monthly_entitlement_kg", "widget-type": "input", "widget-label": "Monthly Entitlement (kg)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.monthly_entitlement_kg"}], "panel-id": "panel_in_section_pds_col2", "panel-orientation": "vertical"}, {"widgets": [{"widget": "text", "widget-id": "last_pds_transaction_date", "widget-type": "input", "widget-label": "Last PDS Transaction Date", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.last_pds_transaction_date"}, {"widget": "text", "widget-id": "pds_ekyc_status", "widget-type": "input", "widget-label": "PDS e-KYC Status", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pds_ekyc_status"}], "panel-id": "panel_in_section_pds_col3", "panel-orientation": "vertical"}], "panel-id": "panel_in_section_pds_main", "panel-orientation": "horizontal"}], "section-id": "in_section_pds", "section-title": "Food & Civil Supplies (PDS / Ration Card)", "section-editable": true, "section-supporting-documents": []}'::jsonb);
-DELETE FROM g2p_register_sections WHERE section_id = 'in_section_pension';
-INSERT INTO g2p_register_sections (section_id, register_id, section_register_id, is_core_section, section_mnemonic, documents_required, no_of_verifications_required, is_list, section_weightage, cr_auto_approve_for_bene_portal, cr_auto_approve_for_agent_portal, cr_auto_approve_for_staff_portal, cr_auto_approve_for_partner, section_ui_schema) VALUES ('in_section_pension', 'a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', false, 'in_section_pension', false, 0, false, 10, false, false, false, false, '{"panels": [{"panels": [{"widgets": [{"widget": "text", "widget-id": "pension_scheme_name", "widget-type": "input", "widget-label": "Pension Scheme Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pension_scheme_name"}, {"widget": "text", "widget-id": "pensioner_id", "widget-type": "input", "widget-label": "Pensioner ID / Application No", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pensioner_id"}, {"widget": "text", "widget-id": "sanction_order_number", "widget-type": "input", "widget-label": "Sanction Order Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.sanction_order_number"}], "panel-id": "panel_in_section_pension_col1", "panel-orientation": "vertical"}, {"widgets": [{"widget": "number", "widget-id": "monthly_pension_amount", "widget-type": "input", "widget-label": "Monthly Pension Amount (\u20b9)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.monthly_pension_amount"}, {"widget": "text", "widget-id": "pension_disbursement_mode", "widget-type": "input", "widget-label": "Disbursement Mode (DBT)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pension_disbursement_mode"}, {"widget": "text", "widget-id": "pension_account_number", "widget-type": "input", "widget-label": "Pension Account Number", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pension_account_number"}], "panel-id": "panel_in_section_pension_col2", "panel-orientation": "vertical"}, {"widgets": [{"widget": "text", "widget-id": "pension_status", "widget-type": "input", "widget-label": "Pension Status", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.pension_status"}, {"widget": "text", "widget-id": "last_disbursement_date", "widget-type": "input", "widget-label": "Last Disbursement Date", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.last_disbursement_date"}], "panel-id": "panel_in_section_pension_col3", "panel-orientation": "vertical"}], "panel-id": "panel_in_section_pension_main", "panel-orientation": "horizontal"}], "section-id": "in_section_pension", "section-title": "Social Welfare & Pensions (NSAP / SSPMIS)", "section-editable": true, "section-supporting-documents": []}'::jsonb);
-DELETE FROM g2p_register_sections WHERE section_id = 'in_section_student';
-INSERT INTO g2p_register_sections (section_id, register_id, section_register_id, is_core_section, section_mnemonic, documents_required, no_of_verifications_required, is_list, section_weightage, cr_auto_approve_for_bene_portal, cr_auto_approve_for_agent_portal, cr_auto_approve_for_staff_portal, cr_auto_approve_for_partner, section_ui_schema) VALUES ('in_section_student', 'a0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', false, 'in_section_student', false, 0, false, 10, false, false, false, false, '{"panels": [{"panels": [{"widgets": [{"widget": "text", "widget-id": "student_id", "widget-type": "input", "widget-label": "Student ID", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.student_id"}, {"widget": "text", "widget-id": "school_udise_code", "widget-type": "input", "widget-label": "School UDISE Code", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.school_udise_code"}, {"widget": "text", "widget-id": "school_name", "widget-type": "input", "widget-label": "School Name", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.school_name"}], "panel-id": "panel_in_section_student_col1", "panel-orientation": "vertical"}, {"widgets": [{"widget": "text", "widget-id": "current_grade", "widget-type": "input", "widget-label": "Current Grade / Class", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.current_grade"}, {"widget": "text", "widget-id": "scholarship_received", "widget-type": "input", "widget-label": "Scholarship Received", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.scholarship_received"}], "panel-id": "panel_in_section_student_col2", "panel-orientation": "vertical"}, {"widgets": [{"widget": "boolean", "widget-id": "midday_meal_beneficiary", "widget-type": "input", "widget-label": "Midday Meal Beneficiary", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.midday_meal_beneficiary"}, {"widget": "number", "widget-id": "attendance_percentage", "widget-type": "input", "widget-label": "Attendance Percentage (%)", "widget-readonly": false, "widget-required": false, "widget-data-path": "a0000000-0000-4000-8000-000000000001.attendance_percentage"}], "panel-id": "panel_in_section_student_col3", "panel-orientation": "vertical"}], "panel-id": "panel_in_section_student_main", "panel-orientation": "horizontal"}], "section-id": "in_section_student", "section-title": "Education & Student Registry (UDISE+ / Medhasoft)", "section-editable": true, "section-supporting-documents": []}'::jsonb);
+-- 2. Clean up individual_info_tab in register (keep in_header_info)
+DELETE FROM g2p_register_ui_tab_sections WHERE tab_id = 'individual_info_tab' AND section_id != 'in_header_info';
 
--- 3. Map sections in g2p_intake_form_ui_tab_sections
-INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) VALUES ('f5b799ea-bc2c-56be-8c08-f2231d8565be', 'nsr_form_tab_individual_intake', 'in_section_demographics', 1);
-INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) VALUES ('a3bdd3b2-945e-58df-a2e8-14bac0d597c2', 'nsr_form_tab_individual_intake', 'in_section_shg', 2);
-INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) VALUES ('70ac53ef-cff8-5157-8244-4535366c2b95', 'nsr_form_tab_individual_intake', 'in_section_biharbhumi', 3);
-INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) VALUES ('aa2c7c75-b446-5255-8496-b24861d2b80a', 'nsr_form_tab_individual_intake', 'in_section_agristack', 4);
-INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) VALUES ('613f4981-5add-597f-8117-53e72668cb9c', 'nsr_form_tab_individual_intake', 'in_section_pds', 5);
-INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) VALUES ('8ace57af-b411-56ba-b825-7e57b7b26bcc', 'nsr_form_tab_individual_intake', 'in_section_pension', 6);
-INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) VALUES ('2ccf0965-64f8-55aa-8d1f-3065367d7b94', 'nsr_form_tab_individual_intake', 'in_section_student', 7);
+-- 3. Delete non-PDS sections from g2p_register_sections
+DELETE FROM g2p_register_sections WHERE section_id IN ('in_section_shg', 'in_section_biharbhumi', 'in_section_agristack', 'in_section_pds', 'in_section_pension', 'in_section_student');
+
+-- 4. Upsert clean in_section_demographics with only collected PDS fields
+DELETE FROM g2p_register_sections WHERE section_id = 'in_section_demographics';
+INSERT INTO g2p_register_sections (
+    section_id, 
+    register_id, 
+    section_register_id, 
+    is_core_section, 
+    section_mnemonic, 
+    documents_required, 
+    no_of_verifications_required, 
+    is_list, 
+    section_weightage, 
+    cr_auto_approve_for_bene_portal, 
+    cr_auto_approve_for_agent_portal, 
+    cr_auto_approve_for_staff_portal, 
+    cr_auto_approve_for_partner, 
+    section_ui_schema
+) VALUES (
+    'in_section_demographics', 
+    'a0000000-0000-4000-8000-000000000001', 
+    'a0000000-0000-4000-8000-000000000001', 
+    false, 
+    'in_section_demographics', 
+    false, 
+    0, 
+    false, 
+    10, 
+    false, 
+    false, 
+    false, 
+    false, 
+    '{
+      "panels": [
+        {
+          "panels": [
+            {
+              "widgets": [
+                {
+                  "widget": "text",
+                  "widget-id": "first_name",
+                  "widget-type": "input",
+                  "widget-label": "First Name",
+                  "widget-readonly": false,
+                  "widget-required": true,
+                  "widget-data-path": "a0000000-0000-4000-8000-000000000001.first_name"
+                },
+                {
+                  "widget": "text",
+                  "widget-id": "last_name",
+                  "widget-type": "input",
+                  "widget-label": "Last Name",
+                  "widget-readonly": false,
+                  "widget-required": true,
+                  "widget-data-path": "a0000000-0000-4000-8000-000000000001.last_name"
+                },
+                {
+                  "widget": "select",
+                  "widget-id": "gender",
+                  "widget-type": "input",
+                  "widget-label": "Gender",
+                  "widget-readonly": false,
+                  "widget-required": true,
+                  "widget-data-path": "a0000000-0000-4000-8000-000000000001.gender",
+                  "widget-data-source": {
+                    "type": "static",
+                    "options": [
+                      {"label": "MALE", "value": "MALE"},
+                      {"label": "FEMALE", "value": "FEMALE"},
+                      {"label": "OTHER", "value": "OTHER"},
+                      {"label": "UNKNOWN", "value": "UNKNOWN"}
+                    ]
+                  }
+                }
+              ],
+              "panel-id": "panel_in_section_demographics_col1",
+              "panel-orientation": "vertical"
+            },
+            {
+              "widgets": [
+                {
+                  "widget": "date",
+                  "widget-id": "birth_date",
+                  "widget-type": "input",
+                  "widget-label": "Date of Birth",
+                  "widget-readonly": false,
+                  "widget-required": true,
+                  "widget-data-path": "a0000000-0000-4000-8000-000000000001.birth_date"
+                },
+                {
+                  "widget": "text",
+                  "widget-id": "foundational_id",
+                  "widget-type": "input",
+                  "widget-label": "Aadhaar Number",
+                  "widget-readonly": false,
+                  "widget-required": false,
+                  "widget-data-path": "a0000000-0000-4000-8000-000000000001.foundational_id"
+                },
+                {
+                  "widget": "select",
+                  "widget-id": "relationship_to_head",
+                  "widget-type": "input",
+                  "widget-label": "Relationship to Head",
+                  "widget-readonly": false,
+                  "widget-required": true,
+                  "widget-data-path": "a0000000-0000-4000-8000-000000000001.relationship_to_head",
+                  "widget-data-source": {
+                    "type": "static",
+                    "options": [
+                      {"label": "Self / Head", "value": "SELF"},
+                      {"label": "Spouse", "value": "SPOUSE"},
+                      {"label": "Child (Son / Daughter)", "value": "CHILD"},
+                      {"label": "Parent", "value": "PARENT"},
+                      {"label": "Sibling", "value": "SIBLING"},
+                      {"label": "Other Relative", "value": "OTHER_RELATIVE"},
+                      {"label": "Non Relative", "value": "NON_RELATIVE"}
+                    ]
+                  }
+                }
+              ],
+              "panel-id": "panel_in_section_demographics_col2",
+              "panel-orientation": "vertical"
+            }
+          ],
+          "panel-id": "panel_in_section_demographics_main",
+          "panel-orientation": "horizontal"
+        }
+      ],
+      "section-id": "in_section_demographics",
+      "section-title": "Citizen Demographics & Identity",
+      "section-editable": true,
+      "section-supporting-documents": []
+    }'::jsonb
+);
+
+-- 5. Map clean section in g2p_intake_form_ui_tab_sections
+INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) 
+VALUES ('f5b799ea-bc2c-56be-8c08-f2231d8565be', 'nsr_form_tab_individual_intake', 'in_section_demographics', 1);
+
+-- 6. Map clean section in g2p_register_ui_tab_sections for individual_info_tab
+INSERT INTO g2p_register_ui_tab_sections (tab_section_id, register_id, tab_id, section_id, section_order) 
+VALUES ('b1000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001', 'individual_info_tab', 'in_section_demographics', 20);
+
+-- 7. Remove unused tabs (Livelihood, Vulnerability, Programs)
+DELETE FROM g2p_register_ui_tab_sections 
+WHERE tab_id IN ('individual_livelihood_tab', 'individual_vulnerability_tab', 'individual_programs_tab');
+
+DELETE FROM g2p_register_ui_tabs 
+WHERE tab_id IN ('individual_livelihood_tab', 'individual_vulnerability_tab', 'individual_programs_tab');
+
+-- 8. Clean up individual Household tab (keep only household lookup)
+DELETE FROM g2p_register_ui_tab_sections 
+WHERE tab_id = '7bf586e3-ba57-45d0-9093-1747f038da16' 
+  AND section_id != 'd1e81461-ee90-483f-8cf2-19028657bca1';
 
 COMMIT;

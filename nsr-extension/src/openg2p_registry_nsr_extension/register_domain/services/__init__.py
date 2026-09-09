@@ -27,3 +27,6 @@ from .g2p_register_domain_service_individual_livestock import (
 from .g2p_register_domain_service_individual_vulnerability import (
     G2PRegisterDomainServiceIndividualVulnerability,
 )
+from .g2p_register_domain_service_farmer import G2PRegisterDomainServiceFarmer
+from .g2p_register_domain_service_farmer_land import G2PRegisterDomainServiceFarmerLand
+from .g2p_register_domain_service_farmer_crop import G2PRegisterDomainServiceFarmerCrop

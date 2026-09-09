@@ -54,6 +54,7 @@ from .register_domain.factory import G2PRegisterDomainFactory
 from .register_domain.services import (
     G2PRegisterDomainServiceIndividual,
     G2PRegisterDomainServiceHousehold,
+    G2PRegisterDomainServiceFarmer,
 )
 
 _logger = logging.getLogger(_config.logging_default_logger_name)
@@ -67,6 +68,7 @@ class Initializer(BaseInitializer):
         G2PRegisterDomainFactory()
         G2PRegisterDomainServiceIndividual()
         G2PRegisterDomainServiceHousehold()
+        G2PRegisterDomainServiceFarmer()
 
     async def fastapi_app_startup(self, app):
         await super().fastapi_app_startup(app)
@@ -143,6 +145,11 @@ class Initializer(BaseInitializer):
             "PRIMARY KEY (submission_id, document_id));"
         )
 
+        # Ensure g2p_register_section_documents has label column
+        direct_sqls.append(
+            "ALTER TABLE g2p_register_section_documents ADD COLUMN IF NOT EXISTS label VARCHAR;"
+        )
+
         try:
             async with dbengine.get().connect() as conn:
                 raw_conn = await conn.get_raw_connection()
@@ -159,6 +166,7 @@ class Initializer(BaseInitializer):
             "g2p_individual_gramstack_columns.sql",
             "g2p_individual_ui_columns_supplement.sql",
             "g2p_individual_ui_sections.sql",
+            "g2p_farmer_registry.sql",
         ]
         for script_name in scripts:
             candidates = [
@@ -248,6 +256,7 @@ class Initializer(BaseInitializer):
                 "g2p_individual_gramstack_columns.sql",
                 "g2p_individual_ui_columns_supplement.sql",
                 "g2p_individual_ui_sections.sql",
+                "g2p_farmer_registry.sql",
             ]
             for script_name in scripts:
                 sql_file = os.path.join(
