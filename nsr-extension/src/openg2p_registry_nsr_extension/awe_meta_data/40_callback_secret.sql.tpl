@@ -17,4 +17,7 @@ INSERT INTO "public"."callback_secret" (
 )
 ON CONFLICT ("id") DO UPDATE SET
     "caller_service" = EXCLUDED."caller_service",
+    "secret_hash" = EXCLUDED."secret_hash",
+    "status" = 'active',
+    "rotated_at" = NOW(),
     "updated_at" = NOW();
