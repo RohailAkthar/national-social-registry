@@ -75,6 +75,108 @@ BEGIN
         EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS address_descriptor VARCHAR;', tbl);
     END LOOP;
 
+    -- Household Assets columns (including BiharBhumi land records)
+    FOR tbl IN SELECT unnest(ARRAY['g2p_intake_form_household_assets', 'g2p_register_household_assets', 'g2p_register_history_household_assets']) LOOP
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = tbl) THEN
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS asset_type VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS asset_category VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS quantity INTEGER;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS size_value NUMERIC;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS size_unit VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS size_band VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS details JSON;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS jamabandi_number VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS khata_number VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS khesra_numbers VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS rayat_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS rakba_area NUMERIC(12, 2);', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS land_type VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS mauza VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS anchal VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS district VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS mutation_status VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS last_mutation_date DATE;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS lpc_status VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS lpc_certificate_number VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS encumbrance_status VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS bhu_lagan_paid_status BOOLEAN;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS registration_deed_number VARCHAR;', tbl);
+        END IF;
+    END LOOP;
+
+    -- Household Programs columns
+    FOR tbl IN SELECT unnest(ARRAY['g2p_intake_form_household_programs', 'g2p_register_household_programs', 'g2p_register_history_household_programs']) LOOP
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = tbl) THEN
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS program_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS program_start_date DATE;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS program_exit_date DATE;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS ration_card_number VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS ration_card_type VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS head_of_household_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS family_member_count INTEGER;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS fps_shop_code VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS dealer_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS e_kyc_status VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS last_transaction_date DATE;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS monthly_entitlement_kg NUMERIC(12, 2);', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS district VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS block VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS shg_id VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS shg_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS vo_id VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS vo_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS clf_id VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS clf_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS member_id VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS member_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS shg_role VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS shg_grading VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS monthly_savings_amount NUMERIC(12, 2);', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS internal_loan_outstanding NUMERIC(12, 2);', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS ccl_limit NUMERIC(12, 2);', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS ccl_utilised NUMERIC(12, 2);', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS bank_account_no VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS ifsc VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS shg_join_date DATE;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS gp VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS village VARCHAR;', tbl);
+        END IF;
+    END LOOP;
+
+    -- Household PDS columns
+    FOR tbl IN SELECT unnest(ARRAY['g2p_intake_form_household_pds', 'g2p_register_household_pds', 'g2p_register_history_household_pds']) LOOP
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = tbl) THEN
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS program_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS ration_card_number VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS ration_card_type VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS head_of_household_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS family_member_count INTEGER;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS fps_shop_code VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS dealer_name VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS e_kyc_status VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS last_transaction_date VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS monthly_entitlement_kg NUMERIC(12, 2);', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS district VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS block VARCHAR;', tbl);
+        END IF;
+    END LOOP;
+
+    -- Household Housing and Services columns
+    FOR tbl IN SELECT unnest(ARRAY['g2p_intake_form_household_housing_and_services', 'g2p_register_household_housing_and_services', 'g2p_register_history_household_housing_and_services']) LOOP
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = tbl) THEN
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS dwelling_type VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS roof_material VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS wall_material VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS floor_material VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS tenure_status VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS water_source_type VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS water_distance_minutes INTEGER;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS sanitation_type VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS lighting_source VARCHAR;', tbl);
+            EXECUTE format('ALTER TABLE %I ADD COLUMN IF NOT EXISTS cooking_fuel_type VARCHAR;', tbl);
+        END IF;
+    END LOOP;
+
     -- 1. Common Location, Personal & Financial Identifiers
     -- g2p_register_individuals
     ALTER TABLE g2p_register_individuals ADD COLUMN IF NOT EXISTS household_id VARCHAR;

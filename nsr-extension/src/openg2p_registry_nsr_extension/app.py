@@ -151,6 +151,55 @@ class Initializer(BaseInitializer):
             for col in household_cols:
                 direct_sqls.append(f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS {col};")
 
+        household_asset_cols = [
+            "asset_type VARCHAR", "asset_category VARCHAR", "quantity INTEGER", "size_value NUMERIC",
+            "size_unit VARCHAR", "size_band VARCHAR", "details JSON",
+            "jamabandi_number VARCHAR", "khata_number VARCHAR", "khesra_numbers VARCHAR",
+            "rayat_name VARCHAR", "rakba_area NUMERIC(12, 2)", "land_type VARCHAR",
+            "mauza VARCHAR", "anchal VARCHAR", "district VARCHAR",
+            "mutation_status VARCHAR", "last_mutation_date DATE", "lpc_status VARCHAR",
+            "lpc_certificate_number VARCHAR", "encumbrance_status VARCHAR",
+            "bhu_lagan_paid_status BOOLEAN", "registration_deed_number VARCHAR",
+        ]
+        for tbl in ["g2p_intake_form_household_assets", "g2p_register_household_assets", "g2p_register_history_household_assets"]:
+            for col in household_asset_cols:
+                direct_sqls.append(
+                    f"DO $$ BEGIN IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = '{tbl}') THEN "
+                    f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS {col}; END IF; END $$;"
+                )
+
+        household_program_cols = [
+            "program_name VARCHAR", "program_start_date DATE", "program_exit_date DATE",
+            "ration_card_number VARCHAR", "ration_card_type VARCHAR", "head_of_household_name VARCHAR",
+            "family_member_count INTEGER", "fps_shop_code VARCHAR", "dealer_name VARCHAR",
+            "e_kyc_status VARCHAR", "last_transaction_date DATE", "monthly_entitlement_kg NUMERIC(12, 2)",
+            "district VARCHAR", "block VARCHAR", "shg_id VARCHAR", "shg_name VARCHAR",
+            "vo_id VARCHAR", "vo_name VARCHAR", "clf_id VARCHAR", "clf_name VARCHAR",
+            "member_id VARCHAR", "member_name VARCHAR", "shg_role VARCHAR", "shg_grading VARCHAR",
+            "monthly_savings_amount NUMERIC(12, 2)", "internal_loan_outstanding NUMERIC(12, 2)",
+            "ccl_limit NUMERIC(12, 2)", "ccl_utilised NUMERIC(12, 2)", "bank_account_no VARCHAR",
+            "ifsc VARCHAR", "shg_join_date DATE", "gp VARCHAR", "village VARCHAR",
+        ]
+        for tbl in ["g2p_intake_form_household_programs", "g2p_register_household_programs", "g2p_register_history_household_programs"]:
+            for col in household_program_cols:
+                direct_sqls.append(
+                    f"DO $$ BEGIN IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = '{tbl}') THEN "
+                    f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS {col}; END IF; END $$;"
+                )
+
+        household_pds_cols = [
+            "program_name VARCHAR", "ration_card_number VARCHAR", "ration_card_type VARCHAR",
+            "head_of_household_name VARCHAR", "family_member_count INTEGER", "fps_shop_code VARCHAR",
+            "dealer_name VARCHAR", "e_kyc_status VARCHAR", "last_transaction_date VARCHAR",
+            "monthly_entitlement_kg NUMERIC(12, 2)", "district VARCHAR", "block VARCHAR",
+        ]
+        for tbl in ["g2p_intake_form_household_pds", "g2p_register_household_pds", "g2p_register_history_household_pds"]:
+            for col in household_pds_cols:
+                direct_sqls.append(
+                    f"DO $$ BEGIN IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = '{tbl}') THEN "
+                    f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS {col}; END IF; END $$;"
+                )
+
         # Fix g2p_registry_documents columns expected by base image model
         direct_sqls.extend([
             "ALTER TABLE g2p_registry_documents ADD COLUMN IF NOT EXISTS source_filename VARCHAR;",
