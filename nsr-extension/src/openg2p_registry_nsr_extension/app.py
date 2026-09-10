@@ -78,15 +78,39 @@ class Initializer(BaseInitializer):
         from openg2p_fastapi_common.context import dbengine
 
         direct_sqls = [
-            "ALTER TABLE g2p_intake_form_submissions ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
-            "ALTER TABLE g2p_intake_form_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
-            "ALTER TABLE g2p_register_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
-            "ALTER TABLE g2p_register_history_individuals ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
-            "ALTER TABLE g2p_intake_form_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
-            "ALTER TABLE g2p_register_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
-            "ALTER TABLE g2p_register_history_households ADD COLUMN IF NOT EXISTS application_reference VARCHAR;",
             "ALTER TABLE g2p_registry_configuration ADD COLUMN IF NOT EXISTS registry_favicon VARCHAR;",
         ]
+
+        all_core_tables = [
+            "g2p_intake_form_submissions",
+            "g2p_intake_form_individuals", "g2p_register_individuals", "g2p_register_history_individuals",
+            "g2p_intake_form_individual_disabilities", "g2p_register_individual_disabilities", "g2p_register_history_individual_disabilities",
+            "g2p_intake_form_individual_land", "g2p_register_individual_land", "g2p_register_history_individual_land",
+            "g2p_intake_form_individual_livelihoods", "g2p_register_individual_livelihoods", "g2p_register_history_individual_livelihoods",
+            "g2p_intake_form_individual_livestock", "g2p_register_individual_livestock", "g2p_register_history_individual_livestock",
+            "g2p_intake_form_individual_programs", "g2p_register_individual_programs", "g2p_register_history_individual_programs",
+            "g2p_intake_form_individual_shocks", "g2p_register_individual_shocks", "g2p_register_history_individual_shocks",
+            "g2p_intake_form_individual_vulnerability", "g2p_register_individual_vulnerability", "g2p_register_history_individual_vulnerability",
+            "g2p_intake_form_households", "g2p_register_households", "g2p_register_history_households",
+            "g2p_intake_form_household_assets", "g2p_register_household_assets", "g2p_register_history_household_assets",
+            "g2p_intake_form_household_housing_and_services", "g2p_register_household_housing_and_services", "g2p_register_history_household_housing_and_services",
+            "g2p_intake_form_household_pds", "g2p_register_household_pds", "g2p_register_history_household_pds",
+            "g2p_intake_form_household_programs", "g2p_register_household_programs", "g2p_register_history_household_programs",
+            "g2p_intake_form_farmers", "g2p_register_farmers", "g2p_register_history_farmers",
+            "g2p_intake_form_farmer_lands", "g2p_register_farmer_lands", "g2p_register_history_farmer_lands",
+            "g2p_intake_form_farmer_crops", "g2p_register_farmer_crops", "g2p_register_history_farmer_crops",
+            "g2p_intake_form_lands", "g2p_register_lands", "g2p_register_history_lands",
+            "g2p_intake_form_crops", "g2p_register_crops", "g2p_register_history_crops",
+        ]
+        for tbl in all_core_tables:
+            direct_sqls.append(
+                f"DO $$ BEGIN IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = '{tbl}') THEN "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS application_reference VARCHAR; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS record_image_document_id TEXT; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS record_image_storage_id TEXT; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS link_foundational_id VARCHAR; "
+                f"END IF; END $$;"
+            )
 
         household_cols = [
             "household_head_person_id VARCHAR",
