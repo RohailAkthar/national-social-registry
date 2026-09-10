@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_farmers (
     relation_name VARCHAR,
     farmer_mobile_number VARCHAR,
     crop_type VARCHAR,
-    land_area_acres NUMERIC,
+    land_area_acres NUMERIC(10, 2),
     land_ownership_type VARCHAR,
     khata_number VARCHAR,
     khesra_number VARCHAR,
@@ -90,8 +90,14 @@ CREATE INDEX IF NOT EXISTS idx_farmers_farmer_id ON g2p_register_farmers(farmer_
 
 -- 2. Create g2p_register_history_farmers
 CREATE TABLE IF NOT EXISTS g2p_register_history_farmers (
-    history_id VARCHAR PRIMARY KEY,
+    history_record_id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
     internal_record_id VARCHAR,
+    tab_id VARCHAR,
+    section_id VARCHAR,
+    change_request_id VARCHAR,
+    submission_id VARCHAR,
+    change_request_source VARCHAR,
+    is_primary_section BOOLEAN DEFAULT FALSE,
     functional_record_id VARCHAR,
     record_name VARCHAR,
     record_status VARCHAR,
@@ -100,6 +106,8 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_farmers (
     link_foundational_id VARCHAR,
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR,
+    approved_at TIMESTAMP WITHOUT TIME ZONE,
+    approved_by VARCHAR,
     last_approved_at TIMESTAMP WITHOUT TIME ZONE,
     last_approved_by VARCHAR,
     search_text TEXT,
@@ -149,7 +157,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_farmers (
     relation_name VARCHAR,
     farmer_mobile_number VARCHAR,
     crop_type VARCHAR,
-    land_area_acres NUMERIC,
+    land_area_acres NUMERIC(10, 2),
     land_ownership_type VARCHAR,
     khata_number VARCHAR,
     khesra_number VARCHAR,
@@ -225,7 +233,7 @@ CREATE TABLE IF NOT EXISTS g2p_intake_form_farmers (
     relation_name VARCHAR,
     farmer_mobile_number VARCHAR,
     crop_type VARCHAR,
-    land_area_acres NUMERIC,
+    land_area_acres NUMERIC(10, 2),
     land_ownership_type VARCHAR,
     khata_number VARCHAR,
     khesra_number VARCHAR,
@@ -271,7 +279,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_lands (
     mauza VARCHAR,
     anchal VARCHAR,
     district VARCHAR,
-    rakba_area NUMERIC
+    rakba_area NUMERIC(10, 2)
 );
 
 ALTER TABLE g2p_register_lands ADD COLUMN IF NOT EXISTS link_foundational_id VARCHAR;
@@ -283,13 +291,18 @@ ALTER TABLE g2p_register_lands ADD COLUMN IF NOT EXISTS search_text TEXT;
 ALTER TABLE g2p_register_lands ADD COLUMN IF NOT EXISTS record_status_reason VARCHAR;
 
 CREATE TABLE IF NOT EXISTS g2p_register_history_lands (
-    history_id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    history_record_id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
     internal_record_id VARCHAR NOT NULL,
+    tab_id VARCHAR,
+    section_id VARCHAR,
+    change_request_id VARCHAR,
+    submission_id VARCHAR,
+    change_request_source VARCHAR,
+    is_primary_section BOOLEAN DEFAULT FALSE,
     version_id VARCHAR,
     valid_from TIMESTAMP WITHOUT TIME ZONE,
     valid_to TIMESTAMP WITHOUT TIME ZONE,
     is_current BOOLEAN DEFAULT TRUE,
-    change_request_id VARCHAR,
     link_internal_record_id VARCHAR,
     link_foundational_id VARCHAR,
     functional_record_id VARCHAR,
@@ -298,6 +311,8 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_lands (
     record_image_document_id TEXT,
     created_by VARCHAR NOT NULL DEFAULT 'system',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    approved_by VARCHAR NOT NULL DEFAULT 'system',
     last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_approved_by VARCHAR NOT NULL DEFAULT 'system',
     search_text TEXT,
@@ -318,7 +333,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_lands (
     mauza VARCHAR,
     anchal VARCHAR,
     district VARCHAR,
-    rakba_area NUMERIC
+    rakba_area NUMERIC(10, 2)
 );
 
 CREATE TABLE IF NOT EXISTS g2p_intake_form_lands (
@@ -353,7 +368,7 @@ CREATE TABLE IF NOT EXISTS g2p_intake_form_lands (
     mauza VARCHAR,
     anchal VARCHAR,
     district VARCHAR,
-    rakba_area NUMERIC
+    rakba_area NUMERIC(10, 2)
 );
 
 CREATE TABLE IF NOT EXISTS g2p_register_crops (
@@ -375,7 +390,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_crops (
     planted_date DATE,
     season VARCHAR,
     end_use VARCHAR,
-    area_cultivated_acres NUMERIC
+    area_cultivated_acres NUMERIC(10, 2)
 );
 
 ALTER TABLE g2p_register_crops ADD COLUMN IF NOT EXISTS link_foundational_id VARCHAR;
@@ -387,13 +402,18 @@ ALTER TABLE g2p_register_crops ADD COLUMN IF NOT EXISTS search_text TEXT;
 ALTER TABLE g2p_register_crops ADD COLUMN IF NOT EXISTS record_status_reason VARCHAR;
 
 CREATE TABLE IF NOT EXISTS g2p_register_history_crops (
-    history_id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    history_record_id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
     internal_record_id VARCHAR NOT NULL,
+    tab_id VARCHAR,
+    section_id VARCHAR,
+    change_request_id VARCHAR,
+    submission_id VARCHAR,
+    change_request_source VARCHAR,
+    is_primary_section BOOLEAN DEFAULT FALSE,
     version_id VARCHAR,
     valid_from TIMESTAMP WITHOUT TIME ZONE,
     valid_to TIMESTAMP WITHOUT TIME ZONE,
     is_current BOOLEAN DEFAULT TRUE,
-    change_request_id VARCHAR,
     link_internal_record_id VARCHAR,
     link_foundational_id VARCHAR,
     functional_record_id VARCHAR,
@@ -402,6 +422,8 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_crops (
     record_image_document_id TEXT,
     created_by VARCHAR NOT NULL DEFAULT 'system',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    approved_by VARCHAR NOT NULL DEFAULT 'system',
     last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_approved_by VARCHAR NOT NULL DEFAULT 'system',
     search_text TEXT,
@@ -411,7 +433,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_crops (
     planted_date DATE,
     season VARCHAR,
     end_use VARCHAR,
-    area_cultivated_acres NUMERIC
+    area_cultivated_acres NUMERIC(10, 2)
 );
 
 CREATE TABLE IF NOT EXISTS g2p_intake_form_crops (
@@ -435,7 +457,7 @@ CREATE TABLE IF NOT EXISTS g2p_intake_form_crops (
     planted_date DATE,
     season VARCHAR,
     end_use VARCHAR,
-    area_cultivated_acres NUMERIC
+    area_cultivated_acres NUMERIC(10, 2)
 );
 
 
@@ -632,7 +654,7 @@ INSERT INTO g2p_register_sections (
                             {"widget": "text", "column-key": "jamabandi_number", "widget-label": "Jamabandi Number", "widget-data-path": "jamabandi_number"},
                             {"widget": "text", "column-key": "khata_number", "widget-label": "Khata", "widget-data-path": "khata_number"},
                             {"widget": "text", "column-key": "khesra_numbers", "widget-label": "Plot / Khesra", "widget-data-path": "khesra_numbers"},
-                            {"widget": "number", "column-key": "rakba_area", "widget-label": "Area (Acres)", "widget-data-path": "rakba_area"},
+                            {"widget": "number", "column-key": "rakba_area", "widget-label": "Area (Acres)", "widget-data-path": "rakba_area", "widget-data-format": {"numericType": "decimal", "decimalPlaces": 2}},
                             {"widget": "text", "column-key": "land_ownership_type", "widget-label": "Ownership Type", "widget-data-path": "land_ownership_type"},
                             {"widget": "text", "column-key": "mauza", "widget-label": "Mauza / Village", "widget-data-path": "mauza"},
                             {"widget": "text", "column-key": "anchal", "widget-label": "Anchal / Block", "widget-data-path": "anchal"},
@@ -676,7 +698,7 @@ INSERT INTO g2p_register_sections (
                         "widget-data-columns": [
                             {"widget": "text", "column-key": "commodity", "widget-label": "Crop / Commodity", "widget-data-path": "commodity"},
                             {"widget": "text", "column-key": "season", "widget-label": "Agricultural Season", "widget-data-path": "season"},
-                            {"widget": "number", "column-key": "area_cultivated_acres", "widget-label": "Cultivated Area (Acres)", "widget-data-path": "area_cultivated_acres"},
+                            {"widget": "number", "column-key": "area_cultivated_acres", "widget-label": "Cultivated Area (Acres)", "widget-data-path": "area_cultivated_acres", "widget-data-format": {"numericType": "decimal", "decimalPlaces": 2}},
                             {"widget": "text", "column-key": "end_use", "widget-label": "End Use", "widget-data-path": "end_use"}
                         ],
                         "widget-data-add-label": "Add Crop",
@@ -832,5 +854,13 @@ ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS record_image_document
 ALTER TABLE g2p_register_crops ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
 ALTER TABLE g2p_register_history_crops ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
 ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
+
+-- 11. Farmer AWE Approval Workflow Policy Configuration
+INSERT INTO g2p_registry_awe_policy_configurations (
+    awe_policy_config_id, policy_scope, register_id, intake_form_id, section_id, policy_type, policy_key, context_field_names
+) VALUES
+    ('a2000000-0000-4000-8000-000000000003', 'REGISTER', 'a0000000-0000-4000-8000-000000000003', '', '', 'registry.change_request', 'registry.change_request.individual', 'null'),
+    ('a2000000-0000-4000-8000-000000000013', 'INTAKE_FORM', 'a0000000-0000-4000-8000-000000000003', 'c1000000-0000-4000-8000-000000000003', '', 'registry.intake_form', 'registry.intake_form.individual', 'null')
+ON CONFLICT (awe_policy_config_id) DO NOTHING;
 
 COMMIT;

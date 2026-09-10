@@ -13,7 +13,7 @@ class G2PFarmerCrop:
     planted_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     season: Mapped[str | None] = mapped_column(String, nullable=True)
     end_use: Mapped[str | None] = mapped_column(String, nullable=True)
-    area_cultivated_acres: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    area_cultivated_acres: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=True)
 
 
 class G2PRegisterFarmerCrop(G2PRegister, G2PFarmerCrop):

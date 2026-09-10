@@ -78,3 +78,19 @@ from .farmer_crop import (
     G2PRegisterHistorySchemaFarmerCrop,
     G2PIntakeFormSchemaFarmerCrop,
 )
+from .student import (
+    G2PRegisterSchemaStudent,
+    G2PRegisterHistorySchemaStudent,
+    G2PIntakeFormSchemaStudent,
+)
+from .student_academic import (
+    G2PRegisterSchemaStudentAcademic,
+    G2PRegisterHistorySchemaStudentAcademic,
+    G2PIntakeFormSchemaStudentAcademic,
+)
+from .student_scholarship import (
+    G2PRegisterSchemaStudentScholarship,
+    G2PRegisterHistorySchemaStudentScholarship,
+    G2PIntakeFormSchemaStudentScholarship,
+)
+

@@ -28,6 +28,21 @@ from .farmer_crop import (
     G2PRegisterHistoryFarmerCrop,
     G2PIntakeFormFarmerCrop,
 )
+from .student import (
+    G2PRegisterStudent,
+    G2PRegisterHistoryStudent,
+    G2PIntakeFormStudent,
+)
+from .student_academic import (
+    G2PRegisterStudentAcademic,
+    G2PRegisterHistoryStudentAcademic,
+    G2PIntakeFormStudentAcademic,
+)
+from .student_scholarship import (
+    G2PRegisterStudentScholarship,
+    G2PRegisterHistoryStudentScholarship,
+    G2PIntakeFormStudentScholarship,
+)
 from .individual_program import (
     G2PRegisterIndividualProgram,
     G2PRegisterHistoryIndividualProgram,

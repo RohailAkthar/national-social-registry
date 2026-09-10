@@ -23,7 +23,7 @@ class G2PFarmerLand:
     mauza: Mapped[str | None] = mapped_column(String, nullable=True)
     anchal: Mapped[str | None] = mapped_column(String, nullable=True)
     district: Mapped[str | None] = mapped_column(String, nullable=True)
-    rakba_area: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    rakba_area: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=True)
 
 
 class G2PRegisterFarmerLand(G2PRegister, G2PFarmerLand):

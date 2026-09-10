@@ -34,7 +34,7 @@ class G2PFarmer:
     farmer_mobile_number: Mapped[str | None] = mapped_column(String, nullable=True)
     mobile_phone_number: Mapped[str | None] = mapped_column(String, nullable=True)
     crop_type: Mapped[str | None] = mapped_column(String, nullable=True)
-    land_area_acres: Mapped[float | None] = mapped_column(Numeric, nullable=True)
+    land_area_acres: Mapped[float | None] = mapped_column(Numeric(10, 2), nullable=True)
     land_ownership_type: Mapped[str | None] = mapped_column(String, nullable=True)
     khata_number: Mapped[str | None] = mapped_column(String, nullable=True)
     khesra_number: Mapped[str | None] = mapped_column(String, nullable=True)

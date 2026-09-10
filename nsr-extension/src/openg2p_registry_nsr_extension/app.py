@@ -55,6 +55,7 @@ from .register_domain.services import (
     G2PRegisterDomainServiceIndividual,
     G2PRegisterDomainServiceHousehold,
     G2PRegisterDomainServiceFarmer,
+    G2PRegisterDomainServiceStudent,
 )
 
 _logger = logging.getLogger(_config.logging_default_logger_name)
@@ -69,6 +70,7 @@ class Initializer(BaseInitializer):
         G2PRegisterDomainServiceIndividual()
         G2PRegisterDomainServiceHousehold()
         G2PRegisterDomainServiceFarmer()
+        G2PRegisterDomainServiceStudent()
 
     async def fastapi_app_startup(self, app):
         await super().fastapi_app_startup(app)
@@ -102,6 +104,9 @@ class Initializer(BaseInitializer):
             "g2p_intake_form_farmer_crops", "g2p_register_farmer_crops", "g2p_register_history_farmer_crops",
             "g2p_intake_form_lands", "g2p_register_lands", "g2p_register_history_lands",
             "g2p_intake_form_crops", "g2p_register_crops", "g2p_register_history_crops",
+            "g2p_intake_form_students", "g2p_register_students", "g2p_register_history_students",
+            "g2p_intake_form_student_academics", "g2p_register_student_academics", "g2p_register_history_student_academics",
+            "g2p_intake_form_student_scholarships", "g2p_register_student_scholarships", "g2p_register_history_student_scholarships",
         ]
         for tbl in all_core_tables:
             direct_sqls.append(
@@ -110,6 +115,44 @@ class Initializer(BaseInitializer):
                 f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS record_image_document_id TEXT; "
                 f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS record_image_storage_id TEXT; "
                 f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS link_foundational_id VARCHAR; "
+                f"END IF; END $$;"
+            )
+
+        for tbl in ["g2p_register_history_farmers", "g2p_register_history_lands", "g2p_register_history_crops"]:
+            direct_sqls.append(
+                f"DO $$ BEGIN IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = '{tbl}') THEN "
+                f"IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = '{tbl}' AND column_name = 'history_id') THEN "
+                f"ALTER TABLE {tbl} RENAME COLUMN history_id TO history_record_id; "
+                f"ELSE "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS history_record_id VARCHAR; "
+                f"END IF; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS tab_id VARCHAR; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS section_id VARCHAR; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS change_request_id VARCHAR; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS submission_id VARCHAR; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS change_request_source VARCHAR; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS is_primary_section BOOLEAN DEFAULT FALSE; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS approved_by VARCHAR; "
+                f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS approved_at TIMESTAMP WITHOUT TIME ZONE; "
+                f"END IF; END $$;"
+            )
+
+        for tbl in ["g2p_register_lands", "g2p_intake_form_lands", "g2p_register_history_lands"]:
+            direct_sqls.append(
+                f"DO $$ BEGIN IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{tbl}' AND column_name = 'rakba_area') THEN "
+                f"ALTER TABLE {tbl} ALTER COLUMN rakba_area TYPE NUMERIC(10, 2) USING ROUND(rakba_area::numeric, 2); "
+                f"END IF; END $$;"
+            )
+        for tbl in ["g2p_register_crops", "g2p_intake_form_crops", "g2p_register_history_crops"]:
+            direct_sqls.append(
+                f"DO $$ BEGIN IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{tbl}' AND column_name = 'area_cultivated_acres') THEN "
+                f"ALTER TABLE {tbl} ALTER COLUMN area_cultivated_acres TYPE NUMERIC(10, 2) USING ROUND(area_cultivated_acres::numeric, 2); "
+                f"END IF; END $$;"
+            )
+        for tbl in ["g2p_register_farmers", "g2p_intake_form_farmers", "g2p_register_history_farmers"]:
+            direct_sqls.append(
+                f"DO $$ BEGIN IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{tbl}' AND column_name = 'land_area_acres') THEN "
+                f"ALTER TABLE {tbl} ALTER COLUMN land_area_acres TYPE NUMERIC(10, 2) USING ROUND(land_area_acres::numeric, 2); "
                 f"END IF; END $$;"
             )
 
@@ -248,6 +291,7 @@ class Initializer(BaseInitializer):
             "g2p_individual_ui_sections.sql",
             "g2p_household_ui_sections.sql",
             "g2p_farmer_registry.sql",
+            "g2p_student_registry.sql",
         ]
         for script_name in scripts:
             candidates = [
