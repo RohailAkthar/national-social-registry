@@ -79,6 +79,7 @@ class Initializer(BaseInitializer):
 
         direct_sqls = [
             "ALTER TABLE g2p_registry_configuration ADD COLUMN IF NOT EXISTS registry_favicon VARCHAR;",
+            "INSERT INTO g2p_register_definitions (register_id, register_mnemonic, register_subject, register_description, master_register_id, register_rank, functional_id_generation_required, register_purpose, program_id, program_mnemonic, register_icon, has_image, dedup_is_enabled, dedup_threshold_score, completion_score_required, outgest_applicable, requires_registrant_authentication, registrant_authentication_validity_days, registrant_re_auth_warning_days_before) VALUES ('b0000000-0000-4000-8000-000000000095', 'HouseholdPds', 'Household PDS', 'PDS Food Security and Ration Card entitlements linked to household', 'a0000000-0000-4000-8000-000000000002', 26, 'FALSE', 'TABLE', NULL, NULL, NULL, 'FALSE', 'FALSE', 0, 'FALSE', 'FALSE', 'FALSE', 730, 30) ON CONFLICT (register_id) DO NOTHING;",
         ]
 
         all_core_tables = [
