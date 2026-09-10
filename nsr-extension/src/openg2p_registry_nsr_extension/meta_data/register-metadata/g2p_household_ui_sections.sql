@@ -7,27 +7,6 @@
 
 BEGIN;
 
--- 0. Ensure HouseholdPds register definition exists in g2p_register_definitions
-INSERT INTO g2p_register_definitions (
-    register_id, register_mnemonic, register_subject, register_description,
-    master_register_id, register_rank, functional_id_generation_required,
-    register_purpose, program_id, program_mnemonic, register_icon,
-    has_image, dedup_is_enabled, dedup_threshold_score, completion_score_required,
-    outgest_applicable, requires_registrant_authentication,
-    registrant_authentication_validity_days, registrant_re_auth_warning_days_before
-) VALUES (
-    'b0000000-0000-4000-8000-000000000095', 'HouseholdPds', 'Household PDS',
-    'PDS Food Security and Ration Card entitlements linked to household',
-    'a0000000-0000-4000-8000-000000000002', 26, 'FALSE',
-    'TABLE', NULL, NULL, NULL,
-    'FALSE', 'FALSE', 0, 'FALSE',
-    'FALSE', 'FALSE', 730, 30
-) ON CONFLICT (register_id) DO UPDATE SET
-    register_mnemonic = EXCLUDED.register_mnemonic,
-    register_subject = EXCLUDED.register_subject,
-    register_description = EXCLUDED.register_description,
-    master_register_id = EXCLUDED.master_register_id;
-
 -- 1. Ensure UI tabs for Household Register
 DELETE FROM g2p_register_ui_tab_sections WHERE register_id = 'a0000000-0000-4000-8000-000000000002';
 DELETE FROM g2p_register_ui_tabs WHERE register_id = 'a0000000-0000-4000-8000-000000000002';
@@ -222,7 +201,8 @@ INSERT INTO g2p_register_sections (
     }'::jsonb
 );
 
--- 2e. PDS Food Security (Ration Card Table)
+-- 2e. Food & Civil Supplies (PDS Ration Card Details - Household fields)
+DELETE FROM g2p_register_sections WHERE section_id = 'hh_pds_details';
 DELETE FROM g2p_register_sections WHERE section_id = 'hh_table_pds';
 INSERT INTO g2p_register_sections (
     section_id, register_id, section_register_id, is_core_section, section_mnemonic,
@@ -230,49 +210,37 @@ INSERT INTO g2p_register_sections (
     cr_auto_approve_for_bene_portal, cr_auto_approve_for_agent_portal,
     cr_auto_approve_for_staff_portal, cr_auto_approve_for_partner, section_ui_schema
 ) VALUES (
-    'hh_table_pds', 'a0000000-0000-4000-8000-000000000002', 'b0000000-0000-4000-8000-000000000095',
-    false, 'hh_table_pds', false, 0, true, 0, false, false, false, false,
+    'hh_pds_details', 'a0000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002',
+    false, 'hh_pds_details', false, 0, false, 10, false, false, false, false,
     '{
         "panels": [
             {
                 "panels": [
                     {
                         "widgets": [
-                            {
-                                "widget": "table",
-                                "widget-id": "pds_programs_table",
-                                "widget-type": "table",
-                                "widget-label": "PDS Food Security (Ration Card)",
-                                "widget-readonly": false,
-                                "widget-data-path": "b0000000-0000-4000-8000-000000000095.records",
-                                "widget-data-columns": [
-                                    {"widget": "text", "column-key": "ration_card_number", "widget-type": "input", "widget-label": "Ration Card Number", "widget-data-path": "ration_card_number"},
-                                    {"widget": "text", "column-key": "ration_card_type", "widget-type": "input", "widget-label": "Ration Card Type", "widget-data-path": "ration_card_type"},
-                                    {"widget": "text", "column-key": "head_of_household_name", "widget-type": "input", "widget-label": "Head of Household Name", "widget-data-path": "head_of_household_name"},
-                                    {"widget": "number", "column-key": "family_member_count", "widget-type": "input", "widget-label": "Family Member Count", "widget-data-path": "family_member_count"},
-                                    {"widget": "text", "column-key": "fps_shop_code", "widget-type": "input", "widget-label": "FPS Shop Code", "widget-data-path": "fps_shop_code"},
-                                    {"widget": "text", "column-key": "dealer_name", "widget-type": "input", "widget-label": "Dealer Name", "widget-data-path": "dealer_name"},
-                                    {"widget": "text", "column-key": "e_kyc_status", "widget-type": "input", "widget-label": "e-KYC Status", "widget-data-path": "e_kyc_status"},
-                                    {"widget": "text", "column-key": "last_transaction_date", "widget-type": "input", "widget-label": "Last Transaction Date", "widget-data-path": "last_transaction_date"},
-                                    {"widget": "number", "column-key": "monthly_entitlement_kg", "widget-type": "input", "widget-label": "Monthly Entitlement (kg)", "widget-data-path": "monthly_entitlement_kg"},
-                                    {"widget": "text", "column-key": "district", "widget-type": "input", "widget-label": "District", "widget-data-path": "district"},
-                                    {"widget": "text", "column-key": "block", "widget-type": "input", "widget-label": "Block", "widget-data-path": "block"}
-                                ],
-                                "widget-data-add-label": "Add Ration Card",
-                                "widget-data-operations": {"add": true, "edit": true, "remove": true}
-                            }
+                            {"widget": "text", "widget-id": "ration_card_number", "widget-type": "input", "widget-label": "Ration Card Number", "widget-data-path": "a0000000-0000-4000-8000-000000000002.ration_card_number", "widget-required": false},
+                            {"widget": "select", "widget-id": "ration_card_type", "widget-type": "input", "widget-label": "Ration Card Type", "widget-data-path": "a0000000-0000-4000-8000-000000000002.ration_card_type", "widget-data-source": {"type": "static", "options": [{"label": "Antyodaya Anna Yojana (AAY)", "value": "AAY"}, {"label": "Priority Household (PHH)", "value": "PHH"}, {"label": "State Ration Card", "value": "STATE"}, {"label": "Non-NFSA", "value": "NON_NFSA"}]}},
+                            {"widget": "number", "widget-id": "monthly_entitlement_kg", "widget-type": "input", "widget-label": "Monthly Entitlement (Kg)", "widget-data-path": "a0000000-0000-4000-8000-000000000002.monthly_entitlement_kg"}
                         ],
-                        "panel-id": "vertical_panel_pds",
-                        "panel-column-span": 3,
+                        "panel-id": "panel_pds_col1",
+                        "panel-orientation": "vertical"
+                    },
+                    {
+                        "widgets": [
+                            {"widget": "text", "widget-id": "fps_shop_code", "widget-type": "input", "widget-label": "FPS Shop Code", "widget-data-path": "a0000000-0000-4000-8000-000000000002.fps_shop_code"},
+                            {"widget": "text", "widget-id": "dealer_name", "widget-type": "input", "widget-label": "Fair Price Shop / Dealer Name", "widget-data-path": "a0000000-0000-4000-8000-000000000002.dealer_name"},
+                            {"widget": "select", "widget-id": "e_kyc_status", "widget-type": "input", "widget-label": "e-KYC Status", "widget-data-path": "a0000000-0000-4000-8000-000000000002.e_kyc_status", "widget-data-source": {"type": "static", "options": [{"label": "Verified", "value": "VERIFIED"}, {"label": "Pending", "value": "PENDING"}, {"label": "Failed", "value": "FAILED"}]}}
+                        ],
+                        "panel-id": "panel_pds_col2",
                         "panel-orientation": "vertical"
                     }
                 ],
-                "panel-id": "horizontal_panel_pds",
+                "panel-id": "panel_pds_main",
                 "panel-orientation": "horizontal"
             }
         ],
-        "section-id": "hh_table_pds",
-        "section-title": "PDS Food Security (Ration Card)",
+        "section-id": "hh_pds_details",
+        "section-title": "Food & Civil Supplies (PDS Ration Card)",
         "section-editable": true
     }'::jsonb
 );
@@ -284,14 +252,14 @@ INSERT INTO g2p_register_ui_tab_sections (tab_section_id, register_id, tab_id, s
 ('b2000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000002', 'household_info_tab', 'hh_composition_headship', 30),
 ('b2000000-0000-4000-8000-000000000004', 'a0000000-0000-4000-8000-000000000002', 'household_info_tab', 'hh_dwelling_services', 40),
 ('b2000000-0000-4000-8000-000000000005', 'a0000000-0000-4000-8000-000000000002', 'household_membership_tab', 'hh_members', 10),
-('b2000000-0000-4000-8000-000000000006', 'a0000000-0000-4000-8000-000000000002', 'household_pds_tab', 'hh_table_pds', 10);
+('b2000000-0000-4000-8000-000000000006', 'a0000000-0000-4000-8000-000000000002', 'household_pds_tab', 'hh_pds_details', 10);
 
 -- 4. Clean Intake Form for Household (only the 5 matching sections)
 DELETE FROM g2p_intake_form_ui_tab_sections WHERE tab_id = 'nsr_form_tab_household_intake';
 INSERT INTO g2p_intake_form_ui_tab_sections (tab_section_id, tab_id, section_id, section_order) VALUES
 ('07e72227-de88-4aab-a5d3-1fb515c0e696', 'nsr_form_tab_household_intake', 'hh_composition_headship', 1),
 ('6fb0fdf0-476f-4640-a297-20ecf395b093', 'nsr_form_tab_household_intake', 'hh_location_details', 2),
-('6a887079-4cbb-4fde-9d0f-9df578569bd4', 'nsr_form_tab_household_intake', 'hh_table_pds', 3),
+('6a887079-4cbb-4fde-9d0f-9df578569bd4', 'nsr_form_tab_household_intake', 'hh_pds_details', 3),
 ('4d197087-c86c-489d-b7ce-18287892ac86', 'nsr_form_tab_household_intake', 'hh_members', 4),
 ('bb939dca-a7be-409e-b8e3-9ee05abf3905', 'nsr_form_tab_household_intake', 'hh_dwelling_services', 5);
 
@@ -305,7 +273,10 @@ INSERT INTO g2p_register_households (
     number_of_female_members, elderly_member_present,
     dwelling_type, tenure_status, region_code,
     zone_subcity_code, woreda_code, locality_ea_code,
-    address_line_1, address_descriptor, search_text
+    address_line_1, address_descriptor,
+    ration_card_number, ration_card_type, fps_shop_code,
+    dealer_name, monthly_entitlement_kg, e_kyc_status,
+    search_text
 ) VALUES (
     '423b19c8-9d0a-40d3-95bd-d00357b87f70', 'HH-BR-0000003', 'Household of Simon Mangat',
     'Staff BPM', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Staff BPM',
@@ -316,6 +287,8 @@ INSERT INTO g2p_register_households (
     'PERMANENT', 'OWNED', 'Bihar',
     'Nalanda', 'Rajgir', 'Rajgir',
     'Rajgir, Nalanda, Bihar', 'Ration Card #10-645-516-978688, Aggarwal Store (FPS-4534), Rajgir, Nalanda',
+    '10-645-516-978688', 'STATE', 'FPS-4534',
+    'Aggarwal Store', 30.00, 'VERIFIED',
     'Simon Mangat 036544241352 10-645-516-978688 Nalanda Rajgir HH-BR-0000003 Aggarwal Store'
 ) ON CONFLICT (internal_record_id) DO UPDATE SET
     functional_record_id = EXCLUDED.functional_record_id,
@@ -339,37 +312,14 @@ INSERT INTO g2p_register_households (
     locality_ea_code = EXCLUDED.locality_ea_code,
     address_line_1 = EXCLUDED.address_line_1,
     address_descriptor = EXCLUDED.address_descriptor,
-    search_text = EXCLUDED.search_text;
-
--- PDS Entitlement Record for Simon Mangat
-INSERT INTO g2p_register_household_pds (
-    internal_record_id, functional_record_id, link_internal_record_id,
-    record_name, created_by, created_at, last_approved_at, last_approved_by,
-    record_status, ration_card_number, ration_card_type,
-    head_of_household_name, family_member_count, fps_shop_code,
-    dealer_name, e_kyc_status, last_transaction_date,
-    monthly_entitlement_kg, district, block, search_text
-) VALUES (
-    '407fd625-d4c8-46c1-83b1-d7fd7ce4abe4', 'PDS-10645516978688', '423b19c8-9d0a-40d3-95bd-d00357b87f70',
-    'Ration Card (10-645-516-978688)', 'Staff BPM', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Staff BPM',
-    'ACTIVE', '10-645-516-978688', 'State',
-    'Simon Mangat', 6, 'FPS-4534',
-    'Aggarwal Store', 'Pending', '2026-02-02',
-    30.00, 'Nalanda', 'Rajgir',
-    '10-645-516-978688 Simon Mangat Aggarwal Store FPS-4534 Nalanda'
-) ON CONFLICT (internal_record_id) DO UPDATE SET
-    link_internal_record_id = EXCLUDED.link_internal_record_id,
     ration_card_number = EXCLUDED.ration_card_number,
     ration_card_type = EXCLUDED.ration_card_type,
-    head_of_household_name = EXCLUDED.head_of_household_name,
-    family_member_count = EXCLUDED.family_member_count,
     fps_shop_code = EXCLUDED.fps_shop_code,
     dealer_name = EXCLUDED.dealer_name,
-    e_kyc_status = EXCLUDED.e_kyc_status,
-    last_transaction_date = EXCLUDED.last_transaction_date,
     monthly_entitlement_kg = EXCLUDED.monthly_entitlement_kg,
-    district = EXCLUDED.district,
-    block = EXCLUDED.block;
+    e_kyc_status = EXCLUDED.e_kyc_status,
+    search_text = EXCLUDED.search_text;
+
 
 -- 6 Household Members (Roster)
 INSERT INTO g2p_register_individuals (

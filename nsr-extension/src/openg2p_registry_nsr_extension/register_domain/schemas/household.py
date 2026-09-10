@@ -53,6 +53,14 @@ class G2PSchemaHousehold:
     cooking_fuel_type: Optional[CookingFuelEnum] = None
     mobile_phone_type: Optional[MobilePhoneTypeEnum] = None
 
+    # PDS Food Security (Ration Card)
+    ration_card_number: Optional[str] = None
+    ration_card_type: Optional[str] = None
+    fps_shop_code: Optional[str] = None
+    dealer_name: Optional[str] = None
+    monthly_entitlement_kg: Optional[float] = None
+    e_kyc_status: Optional[str] = None
+
 
 class G2PRegisterSchemaHousehold(G2PRegisterBaseSchema, G2PGeoSchema, G2PSchemaHousehold):
     """

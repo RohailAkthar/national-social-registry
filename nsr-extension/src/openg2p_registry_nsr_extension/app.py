@@ -147,6 +147,12 @@ class Initializer(BaseInitializer):
             "locality_ea_code VARCHAR",
             "kebele_code VARCHAR",
             "address_descriptor VARCHAR",
+            "ration_card_number VARCHAR",
+            "ration_card_type VARCHAR",
+            "fps_shop_code VARCHAR",
+            "dealer_name VARCHAR",
+            "monthly_entitlement_kg NUMERIC(12, 2)",
+            "e_kyc_status VARCHAR",
         ]
         for tbl in ["g2p_intake_form_households", "g2p_register_households", "g2p_register_history_households"]:
             for col in household_cols:

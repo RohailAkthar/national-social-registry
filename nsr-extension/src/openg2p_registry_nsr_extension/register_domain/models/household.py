@@ -68,6 +68,15 @@ class G2PHousehold:
     kebele_code: Mapped[str | None] = mapped_column(String, nullable=True)
     address_descriptor: Mapped[str | None] = mapped_column(String, nullable=True)
 
+    # PDS Food Security (Ration Card)
+    ration_card_number: Mapped[str | None] = mapped_column(String, nullable=True)
+    ration_card_type: Mapped[str | None] = mapped_column(String, nullable=True)
+    fps_shop_code: Mapped[str | None] = mapped_column(String, nullable=True)
+    dealer_name: Mapped[str | None] = mapped_column(String, nullable=True)
+    monthly_entitlement_kg: Mapped[float | None] = mapped_column(Numeric(12, 2), nullable=True)
+    e_kyc_status: Mapped[str | None] = mapped_column(String, nullable=True)
+
+
 
 class G2PRegisterHousehold(G2PRegister, G2PGeo, G2PHousehold):
     __tablename__ = "g2p_register_households"
