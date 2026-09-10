@@ -248,6 +248,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_lands (
     functional_record_id VARCHAR,
     record_name VARCHAR,
     record_image_storage_id TEXT,
+    record_image_document_id TEXT,
     created_by VARCHAR NOT NULL DEFAULT 'system',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -294,6 +295,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_lands (
     functional_record_id VARCHAR,
     record_name VARCHAR,
     record_image_storage_id TEXT,
+    record_image_document_id TEXT,
     created_by VARCHAR NOT NULL DEFAULT 'system',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -328,6 +330,7 @@ CREATE TABLE IF NOT EXISTS g2p_intake_form_lands (
     functional_record_id VARCHAR,
     record_name VARCHAR,
     record_image_storage_id TEXT,
+    record_image_document_id TEXT,
     created_by VARCHAR NOT NULL DEFAULT 'system',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -360,6 +363,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_crops (
     functional_record_id VARCHAR,
     record_name VARCHAR,
     record_image_storage_id TEXT,
+    record_image_document_id TEXT,
     created_by VARCHAR NOT NULL DEFAULT 'system',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -395,6 +399,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_crops (
     functional_record_id VARCHAR,
     record_name VARCHAR,
     record_image_storage_id TEXT,
+    record_image_document_id TEXT,
     created_by VARCHAR NOT NULL DEFAULT 'system',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -418,6 +423,7 @@ CREATE TABLE IF NOT EXISTS g2p_intake_form_crops (
     functional_record_id VARCHAR,
     record_name VARCHAR,
     record_image_storage_id TEXT,
+    record_image_document_id TEXT,
     created_by VARCHAR NOT NULL DEFAULT 'system',
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -818,5 +824,13 @@ ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS last_approved_at TIME
 ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS last_approved_by VARCHAR NOT NULL DEFAULT 'system';
 ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS search_text TEXT;
 ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS record_status_reason VARCHAR;
+
+ALTER TABLE g2p_register_lands ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
+ALTER TABLE g2p_register_history_lands ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
+
+ALTER TABLE g2p_register_crops ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
+ALTER TABLE g2p_register_history_crops ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS record_image_document_id TEXT;
 
 COMMIT;
