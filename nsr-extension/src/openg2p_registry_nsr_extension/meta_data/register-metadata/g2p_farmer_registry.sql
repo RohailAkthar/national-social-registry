@@ -478,7 +478,7 @@ INSERT INTO g2p_register_definitions (
 ) VALUES (
     'a0000000-0000-4000-8000-000000000003', 'Farmer', 'Farmers',
     'Farmer register — personal demographics, landholdings, crop cultivation, agricultural inputs and PM-KISAN entitlements',
-    'a0000000-0000-4000-8000-000000000002', 3, 'TRUE', 'REGISTER',
+    NULL, 3, 'TRUE', 'REGISTER',
     NULL, NULL, 'tractor', 'FALSE', 'TRUE', 0.75, 'FALSE', 'FALSE', 'FALSE', 730, 30
 );
 
