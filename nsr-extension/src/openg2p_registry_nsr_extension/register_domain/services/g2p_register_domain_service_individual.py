@@ -168,9 +168,15 @@ class G2PRegisterDomainServiceIndividual(G2PRegisterDomainService):
         await recompute_household_roster_for_household(session, link_internal_record_id)
 
     async def post_approve(self, change_request: G2PRegisterChangeRequest, session: AsyncSession):
+        import sys
         from openg2p_registry_core.models import G2PRegisterChangeRequestPayload
-        from ..models.household import G2PRegisterHousehold
-        from ..models.individual import G2PRegisterIndividual
+        if "openg2p_registry_extensions.register_domain.models" in sys.modules:
+            mod = sys.modules["openg2p_registry_extensions.register_domain.models"]
+            G2PRegisterHousehold = getattr(mod, "G2PRegisterHousehold")
+            G2PRegisterIndividual = getattr(mod, "G2PRegisterIndividual")
+        else:
+            from ..models.household import G2PRegisterHousehold
+            from ..models.individual import G2PRegisterIndividual
 
         payload_obj = await session.get(G2PRegisterChangeRequestPayload, change_request.change_request_id)
         if not payload_obj or not payload_obj.change_payload:

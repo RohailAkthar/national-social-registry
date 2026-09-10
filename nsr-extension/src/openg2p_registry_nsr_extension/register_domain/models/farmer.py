@@ -51,6 +51,7 @@ class G2PFarmer:
 
 class G2PRegisterFarmer(G2PRegister, G2PGeo, G2PPerson, G2PFarmer):
     __tablename__ = "g2p_register_farmers"
+    __table_args__ = {"extend_existing": True}
 
     def get_search_text_fields(self) -> str:
         """Return farmer search text."""
@@ -63,10 +64,12 @@ class G2PRegisterFarmer(G2PRegister, G2PGeo, G2PPerson, G2PFarmer):
 
 class G2PRegisterHistoryFarmer(G2PRegisterHistory, G2PGeoHistory, G2PPersonHistory, G2PFarmer):
     __tablename__ = "g2p_register_history_farmers"
+    __table_args__ = {"extend_existing": True}
 
 
 class G2PIntakeFormFarmer(G2PIntakeForm, G2PRegister, G2PGeo, G2PPerson, G2PFarmer):
     __tablename__ = "g2p_intake_form_farmers"
+    __table_args__ = {"extend_existing": True}
 
     def get_search_text_fields(self) -> str:
         return G2PRegisterDomainServiceFarmer().construct_search_text(self.to_dict())

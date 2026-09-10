@@ -155,8 +155,14 @@ async def recompute_household_roster_for_household(
     changed_member_id: str | None = None,
     changed_member_payload: dict | None = None,
 ) -> None:
-    from ...models.household import G2PRegisterHousehold
-    from ...models.individual import G2PRegisterIndividual
+    import sys
+    if "openg2p_registry_extensions.register_domain.models" in sys.modules:
+        mod = sys.modules["openg2p_registry_extensions.register_domain.models"]
+        G2PRegisterHousehold = getattr(mod, "G2PRegisterHousehold")
+        G2PRegisterIndividual = getattr(mod, "G2PRegisterIndividual")
+    else:
+        from ...models.household import G2PRegisterHousehold
+        from ...models.individual import G2PRegisterIndividual
 
     household = await session.get(G2PRegisterHousehold, household_internal_record_id)
     if not household:

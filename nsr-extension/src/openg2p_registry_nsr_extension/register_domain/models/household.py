@@ -80,6 +80,7 @@ class G2PHousehold:
 
 class G2PRegisterHousehold(G2PRegister, G2PGeo, G2PHousehold):
     __tablename__ = "g2p_register_households"
+    __table_args__ = {"extend_existing": True}
 
     def get_search_text_fields(self) -> str:
         """Return household fields used to build search_text."""
@@ -92,10 +93,12 @@ class G2PRegisterHousehold(G2PRegister, G2PGeo, G2PHousehold):
 
 class G2PRegisterHistoryHousehold(G2PRegisterHistory, G2PGeoHistory, G2PHousehold):
     __tablename__ = "g2p_register_history_households"
+    __table_args__ = {"extend_existing": True}
 
 
 class G2PIntakeFormHousehold(G2PIntakeForm, G2PRegister, G2PGeo, G2PHousehold):
     __tablename__ = "g2p_intake_form_households"
+    __table_args__ = {"extend_existing": True}
 
     def get_search_text_fields(self) -> str:
         """Return household fields used to build search_text."""

@@ -14,5 +14,9 @@ class G2PIdGeneratorService(BaseService, G2PIdGeneratorInterface):
             return IdAffix(prefix="IN-", suffix="")
         if mnemonic == "household":
             return IdAffix(prefix="HH-", suffix="")
+        if mnemonic == "farmer":
+            return IdAffix(prefix="FAR-", suffix="")
+        if mnemonic == "student":
+            return IdAffix(prefix="STU-", suffix="")
 
         return IdAffix(prefix="DEFAULT-", suffix="")

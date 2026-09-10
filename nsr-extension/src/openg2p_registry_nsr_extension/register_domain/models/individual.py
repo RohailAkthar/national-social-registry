@@ -212,6 +212,7 @@ class G2PIndividual:
 
 class G2PRegisterIndividual(G2PRegister, G2PPerson, G2PGeo, G2PIndividual):
     __tablename__ = "g2p_register_individuals"
+    __table_args__ = {"extend_existing": True}
 
     def get_record_name_fields(self) -> str:
         """Return individual fields used to build record_name."""
@@ -226,10 +227,12 @@ class G2PRegisterHistoryIndividual(
     G2PRegisterHistory, G2PPersonHistory, G2PGeoHistory, G2PIndividual
 ):
     __tablename__ = "g2p_register_history_individuals"
+    __table_args__ = {"extend_existing": True}
 
 
 class G2PIntakeFormIndividual(G2PIntakeForm, G2PRegister, G2PPerson, G2PGeo, G2PIndividual):
     __tablename__ = "g2p_intake_form_individuals"
+    __table_args__ = {"extend_existing": True}
 
     async def get_link_internal_record_id(self, session):
         from .household import G2PIntakeFormHousehold

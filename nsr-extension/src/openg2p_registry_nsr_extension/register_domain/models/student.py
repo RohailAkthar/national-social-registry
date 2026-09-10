@@ -55,6 +55,7 @@ class G2PStudent:
 
 class G2PRegisterStudent(G2PRegister, G2PGeo, G2PPerson, G2PStudent):
     __tablename__ = "g2p_register_students"
+    __table_args__ = {"extend_existing": True}
 
     def get_search_text_fields(self) -> str:
         """Return student search text."""
@@ -67,10 +68,12 @@ class G2PRegisterStudent(G2PRegister, G2PGeo, G2PPerson, G2PStudent):
 
 class G2PRegisterHistoryStudent(G2PRegisterHistory, G2PGeoHistory, G2PPersonHistory, G2PStudent):
     __tablename__ = "g2p_register_history_students"
+    __table_args__ = {"extend_existing": True}
 
 
 class G2PIntakeFormStudent(G2PIntakeForm, G2PRegister, G2PGeo, G2PPerson, G2PStudent):
     __tablename__ = "g2p_intake_form_students"
+    __table_args__ = {"extend_existing": True}
 
     def get_search_text_fields(self) -> str:
         return G2PRegisterDomainServiceStudent().construct_search_text(self.to_dict())
