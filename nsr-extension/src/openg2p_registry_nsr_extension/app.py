@@ -239,6 +239,7 @@ class Initializer(BaseInitializer):
             "g2p_individual_gramstack_columns.sql",
             "g2p_individual_ui_columns_supplement.sql",
             "g2p_individual_ui_sections.sql",
+            "g2p_household_ui_sections.sql",
             "g2p_farmer_registry.sql",
         ]
         for script_name in scripts:
