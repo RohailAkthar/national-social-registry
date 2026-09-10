@@ -63,3 +63,18 @@ from .household_pds import (
     G2PRegisterHistorySchemaHouseholdPds,
     G2PIntakeFormSchemaHouseholdPds,
 )
+from .farmer import (
+    G2PRegisterSchemaFarmer,
+    G2PRegisterHistorySchemaFarmer,
+    G2PIntakeFormSchemaFarmer,
+)
+from .farmer_land import (
+    G2PRegisterSchemaFarmerLand,
+    G2PRegisterHistorySchemaFarmerLand,
+    G2PIntakeFormSchemaFarmerLand,
+)
+from .farmer_crop import (
+    G2PRegisterSchemaFarmerCrop,
+    G2PRegisterHistorySchemaFarmerCrop,
+    G2PIntakeFormSchemaFarmerCrop,
+)

@@ -321,6 +321,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_lands (
 
 CREATE TABLE IF NOT EXISTS g2p_intake_form_lands (
     submission_id UUID,
+    application_reference VARCHAR,
     internal_record_id VARCHAR,
     link_internal_record_id VARCHAR,
     link_foundational_id VARCHAR,
@@ -410,6 +411,7 @@ CREATE TABLE IF NOT EXISTS g2p_register_history_crops (
 
 CREATE TABLE IF NOT EXISTS g2p_intake_form_crops (
     submission_id UUID,
+    application_reference VARCHAR,
     internal_record_id VARCHAR,
     link_internal_record_id VARCHAR,
     link_foundational_id VARCHAR,
@@ -798,5 +800,23 @@ ALTER TABLE g2p_intake_form_farmers ADD COLUMN IF NOT EXISTS occupation VARCHAR;
 ALTER TABLE g2p_intake_form_farmers ADD COLUMN IF NOT EXISTS income_level VARCHAR;
 ALTER TABLE g2p_intake_form_farmers ADD COLUMN IF NOT EXISTS language_code VARCHAR;
 ALTER TABLE g2p_intake_form_farmers ADD COLUMN IF NOT EXISTS registration_date DATE;
+
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS link_foundational_id VARCHAR;
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS record_image_storage_id TEXT;
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS created_by VARCHAR NOT NULL DEFAULT 'system';
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS last_approved_by VARCHAR NOT NULL DEFAULT 'system';
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS search_text TEXT;
+ALTER TABLE g2p_intake_form_lands ADD COLUMN IF NOT EXISTS record_status_reason VARCHAR;
+
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS application_reference VARCHAR;
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS link_foundational_id VARCHAR;
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS record_image_storage_id TEXT;
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS created_by VARCHAR NOT NULL DEFAULT 'system';
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS last_approved_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS last_approved_by VARCHAR NOT NULL DEFAULT 'system';
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS search_text TEXT;
+ALTER TABLE g2p_intake_form_crops ADD COLUMN IF NOT EXISTS record_status_reason VARCHAR;
 
 COMMIT;
