@@ -43,6 +43,11 @@ from .student_scholarship import (
     G2PRegisterHistoryStudentScholarship,
     G2PIntakeFormStudentScholarship,
 )
+from .group import (
+    G2PRegisterGroup,
+    G2PRegisterHistoryGroup,
+    G2PIntakeFormGroup,
+)
 from .individual_program import (
     G2PRegisterIndividualProgram,
     G2PRegisterHistoryIndividualProgram,

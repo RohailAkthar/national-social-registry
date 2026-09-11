@@ -49,6 +49,9 @@ from .register_domain.models import (
     G2PRegisterHouseholdPds,
     G2PRegisterHistoryHouseholdPds,
     G2PIntakeFormHouseholdPds,
+    G2PRegisterGroup,
+    G2PRegisterHistoryGroup,
+    G2PIntakeFormGroup,
 )
 from .register_domain.factory import G2PRegisterDomainFactory
 from .register_domain.services import (
@@ -56,6 +59,7 @@ from .register_domain.services import (
     G2PRegisterDomainServiceHousehold,
     G2PRegisterDomainServiceFarmer,
     G2PRegisterDomainServiceStudent,
+    G2PRegisterDomainServiceGroup,
 )
 
 _logger = logging.getLogger(_config.logging_default_logger_name)
@@ -71,6 +75,7 @@ class Initializer(BaseInitializer):
         G2PRegisterDomainServiceHousehold()
         G2PRegisterDomainServiceFarmer()
         G2PRegisterDomainServiceStudent()
+        G2PRegisterDomainServiceGroup()
 
     async def fastapi_app_startup(self, app):
         await super().fastapi_app_startup(app)
@@ -107,6 +112,7 @@ class Initializer(BaseInitializer):
             "g2p_intake_form_students", "g2p_register_students", "g2p_register_history_students",
             "g2p_intake_form_student_academics", "g2p_register_student_academics", "g2p_register_history_student_academics",
             "g2p_intake_form_student_scholarships", "g2p_register_student_scholarships", "g2p_register_history_student_scholarships",
+            "g2p_intake_form_groups", "g2p_register_groups", "g2p_register_history_groups",
         ]
         for tbl in all_core_tables:
             direct_sqls.append(
@@ -273,6 +279,20 @@ class Initializer(BaseInitializer):
             "ALTER TABLE g2p_register_section_documents ADD COLUMN IF NOT EXISTS label VARCHAR;"
         )
 
+        # Ensure Group register definition is configured as standalone REGISTER with rank 5
+        direct_sqls.append(
+            "UPDATE g2p_register_definitions SET register_purpose = 'REGISTER', register_subject = 'Groups', register_rank = 5 WHERE register_id = 'a0000000-0000-4000-8000-000000000005';"
+        )
+
+        for tbl in ["g2p_register_groups", "g2p_register_history_groups", "g2p_intake_form_groups"]:
+            direct_sqls.append(f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS member_id VARCHAR;")
+            direct_sqls.append(f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS lokos_id VARCHAR;")
+
+        # Ensure foundational_id is displayed as Aadhaar ID rather than Fayda ID
+        direct_sqls.append(
+            "UPDATE registry_languages SET domain_translation = replace(domain_translation, '\"foundational_id\":\"Fayda ID\"', '\"foundational_id\":\"Aadhaar ID\"') WHERE domain_translation LIKE '%Fayda ID%';"
+        )
+
         try:
             async with dbengine.get().connect() as conn:
                 raw_conn = await conn.get_raw_connection()
@@ -292,6 +312,7 @@ class Initializer(BaseInitializer):
             "g2p_household_ui_sections.sql",
             "g2p_farmer_registry.sql",
             "g2p_student_registry.sql",
+            "g2p_group_registry.sql",
         ]
         for script_name in scripts:
             candidates = [
@@ -373,6 +394,10 @@ class Initializer(BaseInitializer):
             await G2PRegisterHistoryHouseholdPds.create_migrate()
             await G2PIntakeFormHouseholdPds.create_migrate()
 
+            await G2PRegisterGroup.create_migrate()
+            await G2PRegisterHistoryGroup.create_migrate()
+            await G2PIntakeFormGroup.create_migrate()
+
             import os
             from sqlalchemy import text
             from openg2p_fastapi_common.context import dbengine
@@ -381,7 +406,10 @@ class Initializer(BaseInitializer):
                 "g2p_individual_gramstack_columns.sql",
                 "g2p_individual_ui_columns_supplement.sql",
                 "g2p_individual_ui_sections.sql",
+                "g2p_household_ui_sections.sql",
                 "g2p_farmer_registry.sql",
+                "g2p_student_registry.sql",
+                "g2p_group_registry.sql",
             ]
             for script_name in scripts:
                 sql_file = os.path.join(

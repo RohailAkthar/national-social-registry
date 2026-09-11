@@ -93,4 +93,10 @@ from .student_scholarship import (
     G2PRegisterHistorySchemaStudentScholarship,
     G2PIntakeFormSchemaStudentScholarship,
 )
+from .group import (
+    G2PSchemaGroup,
+    G2PRegisterSchemaGroup,
+    G2PRegisterHistorySchemaGroup,
+    G2PIntakeFormSchemaGroup,
+)
 
